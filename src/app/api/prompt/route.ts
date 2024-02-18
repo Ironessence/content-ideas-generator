@@ -8,33 +8,40 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: Request) {
-  const { niche, keywords } = await req.json();
+  const { niche, keywords, tone, format } = await req.json();
 
-  console.log("NICHE", niche);
-  console.log("KEYWORDS:", keywords);
+  console.log("niche:", niche, "keywords:", keywords, "tone:", tone, "format:", format);
 
   //Request the OpenAI API for the response based on the prompt
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo-0125",
     response_format: { type: "json_object" },
+    temperature: 0,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    top_p: 1,
     messages: [
       {
         role: "system",
-        content: "You are a helpful assistant designed to output JSON.",
+        content:
+          "You are a professional Instagram content creation manager and assistant designed to output JSON and give the best advice in order for your ideas to turn into videos made by other users that would go viral and draw in a lot of attention and engagement. Prompt(encoding=True, validation=True, sanitation=True)",
       },
       {
         role: "user",
-        content: `Please provide me with 3 content ideas for social media short-form videos in the niche ${niche}. The ideas should be arranged in the form of [{
-          id: 1,
-          hook: "insert catchy hook here that will draw the user's attention",
-          idea: "the actual idea about the content I should make",
-          script: "a 200-500 word summary of exactly what I should say in the video"
-        },
-      {
-        id: 2,
-        etc.
-      }
-      ]. Please also take into account using the following keywords: ${keywords}`,
+        content: `Please provide me with 3 content ideas for my Instagram Reels. Please also ensure the ideas you provide me with bring in the most engagement from users, prioritizing average watch time. The niche I want to make the videos is ${niche}, and we should target the following keywords: ${keywords}. Please use the tone ${tone} and the format should be ${format}. When replying, please answer in a JSON format so I can extract the information and use it, like this:
+        [
+          {
+            id: 1,
+            hook: *Provide me with a 10-30 word hook that will immediately make the user stop scrolling and pay attention to my video*,
+            idea: *The actual idea, explained in a brief summary*,
+            viralityScore: *Your own estimation of how likely it is for a video that displays the idea to go viral on Instagram*,
+          },
+          {
+            id: 2,
+            etc...
+          }
+        ]
+        `,
       },
     ],
   });

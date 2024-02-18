@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,24 +11,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DataType } from "@/types/data.types";
 
 export default function Home() {
   const [niche, setNiche] = useState<string>("");
   const [keywords, setKeywords] = useState<string>("");
-  const [data, setData] = useState();
+  const [tone, setTone] = useState<string | undefined>();
+  const [format, setFormat] = useState<string | undefined>();
+  const [data, setData] = useState<DataType | undefined>();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     await fetch("http://localhost:3000/api/prompt", {
       method: "POST",
-      body: JSON.stringify({ niche, keywords }),
+      body: JSON.stringify({ niche, keywords, tone, format }),
     })
       .then((res) => {
-        console.log("res.json():", res.clone().json());
         setNiche("");
         setKeywords("");
+        setTone(undefined);
+        setFormat(undefined);
         return res.clone().json();
       })
-      .then((data) => setData(data))
+      .then((data) => {
+        setData(JSON.parse(data));
+      })
       .catch((err) => console.log("err:", err));
   };
 
@@ -48,7 +55,10 @@ export default function Home() {
       </div>
       <div className="flex justify-center gap-4 px-4 text-center md:px-6 ">
         <div className="flex flex-col flex-1">
-          <form className="flex flex-col items-center gap-3">
+          <form
+            className="flex flex-col items-center gap-3"
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <div className="space-y-2">
               <label
                 className="block text-sm font-medium leading-5 text-gray-900"
@@ -59,6 +69,7 @@ export default function Home() {
               <Input
                 id="niche"
                 placeholder="Enter your niche"
+                onChange={(e) => setNiche(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -71,6 +82,7 @@ export default function Home() {
               <Input
                 id="keywords"
                 placeholder="Enter your keywords"
+                onChange={(e) => setKeywords(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -80,16 +92,16 @@ export default function Home() {
               >
                 Tone
               </label>
-              <Select>
+              <Select onValueChange={setTone}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a tone" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Tone</SelectLabel>
-                    <SelectItem value="apple">Informative</SelectItem>
-                    <SelectItem value="banana">Entertaining</SelectItem>
-                    <SelectItem value="blueberry">Funny</SelectItem>
+                    <SelectItem value="informative">Informative</SelectItem>
+                    <SelectItem value="entertaining">Entertaining</SelectItem>
+                    <SelectItem value="funny">Funny</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -101,27 +113,46 @@ export default function Home() {
               >
                 Format
               </label>
-              <Select>
+              <Select onValueChange={setFormat}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a format" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Format</SelectLabel>
-                    <SelectItem value="apple">5-10 sec</SelectItem>
-                    <SelectItem value="banana">10-30 sec</SelectItem>
-                    <SelectItem value="blueberry">30-60 sec</SelectItem>
+                    <SelectItem value="5-10 seconds">5-10 sec</SelectItem>
+                    <SelectItem value="10-30 seconds">10-30 sec</SelectItem>
+                    <SelectItem value="30-60 seconds">30-60 sec</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
-            <Button className="bg-slate-950 w-auto mt-5">Generate</Button>
+            <Button
+              className="bg-slate-950 w-auto mt-5"
+              type="submit"
+            >
+              Generate
+            </Button>
           </form>
         </div>
 
         <div className="flex flex-col flex-1">
           <h2 className="text-center font-bold text-xl">Ideas:</h2>
-          {data ? data : <h3 className="mt-3">It is empty here. Generate something?</h3>}
+          {data ? (
+            data.ideas.map((idea) => (
+              <div
+                className="flex flex-col"
+                key={idea.id}
+              >
+                <h2 className="font-bold text-center">{`Idea #${idea.id}`}</h2>
+                <h3>Hook: {idea.hook}</h3>
+                <h3>Idea: {idea.idea}</h3>
+                <h3>Virality score: {idea.viralityScore}</h3>
+              </div>
+            ))
+          ) : (
+            <h3 className="mt-3">It is empty here. Generate something?</h3>
+          )}
         </div>
       </div>
     </>
