@@ -11,16 +11,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DataType } from "@/types/data.types";
+import { DataType } from "@/types/idea.types";
+import { useUserContext } from "@/context/AuthContext";
+import SignInDialog from "@/components/shared/SignInDialog";
 
 export default function Home() {
+  const { user } = useUserContext();
+
   const [niche, setNiche] = useState<string>("");
   const [keywords, setKeywords] = useState<string>("");
   const [tone, setTone] = useState<string | undefined>();
   const [format, setFormat] = useState<string | undefined>();
   const [data, setData] = useState<DataType | undefined>();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    console.log("user:", user);
+  }, [user]);
+
+  const handleSubmit = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await fetch("http://localhost:3000/api/prompt", {
       method: "POST",
@@ -55,10 +64,7 @@ export default function Home() {
       </div>
       <div className="flex justify-center gap-4 px-4 text-center md:px-6 ">
         <div className="flex flex-col flex-1">
-          <form
-            className="flex flex-col items-center gap-3"
-            onSubmit={(e) => handleSubmit(e)}
-          >
+          <form className="flex flex-col items-center gap-3">
             <div className="space-y-2">
               <label
                 className="block text-sm font-medium leading-5 text-gray-900"
@@ -130,6 +136,16 @@ export default function Home() {
             <Button
               className="bg-slate-950 w-auto mt-5"
               type="submit"
+              onClick={(e) => {
+                if (user) {
+                  handleSubmit(e);
+                } else {
+                  console.log("else");
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsLoginOpen(true);
+                }
+              }}
             >
               Generate
             </Button>
@@ -155,6 +171,10 @@ export default function Home() {
           )}
         </div>
       </div>
+      <SignInDialog
+        isLoginOpen={isLoginOpen}
+        setIsLoginOpen={setIsLoginOpen}
+      />
     </>
   );
 }
