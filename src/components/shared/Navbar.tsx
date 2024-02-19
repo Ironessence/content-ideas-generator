@@ -12,7 +12,6 @@ const Navbar = () => {
           height={150}
           alt="logo"
           priority
-          objectFit="contain"
         />
       </div>
       <div className="h-auto w-auto">
