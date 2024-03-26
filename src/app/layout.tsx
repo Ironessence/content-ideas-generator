@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Kanit } from "next/font/google";
 import "./globals.css";
 import Providers from "@/lib/providers/Providers";
 import Navbar from "@/components/shared/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
+export const kanit = Kanit({ weight: "400", subsets: ["latin"], variable: "--font-kanit" });
 
 export const metadata: Metadata = {
   title: "IdeaFizz",

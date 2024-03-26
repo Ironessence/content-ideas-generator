@@ -1,18 +1,14 @@
-import Image from "next/image";
 import React from "react";
 import AvatarComponent from "./AvatarComponent";
+import { kanit } from "@/app/layout";
 
 const Navbar = () => {
   return (
-    <div className="h-[70px] w-full flex px-5 pt-2 align-center justify-between">
+    <div className="h-[70px] w-full flex px-6 pt-5 align-center justify-between">
       <div className="h-auto w-auto ">
-        <Image
-          src={"/assets/logo/ideafizz black.png"}
-          width={150}
-          height={150}
-          alt="logo"
-          priority
-        />
+        <h2 className={`${kanit.variable} font-sans text-2xl font-extrabold tracking-wider`}>
+          IdeaFizz
+        </h2>
       </div>
       <div className="h-auto w-auto">
         <AvatarComponent />
