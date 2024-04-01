@@ -14,6 +14,7 @@ import {
 import { DataType } from "@/types/idea.types";
 import { useUserContext } from "@/context/AuthContext";
 import SignInDialog from "@/components/shared/SignInDialog";
+import Hero from "@/components/sections/Hero";
 
 export default function Home() {
   const { user } = useUserContext();
@@ -24,10 +25,6 @@ export default function Home() {
   const [format, setFormat] = useState<string | undefined>();
   const [data, setData] = useState<DataType | undefined>();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-
-  useEffect(() => {
-    console.log("user:", user);
-  }, [user]);
 
   const handleSubmit = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -49,8 +46,9 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div className="bg-gray-50/90 py-6 w-full">
+    <div className="h-full w-full ">
+      <Hero />
+      {/* <div className="bg-gray-50/90 py-6 w-full">
         <div className="container flex items-center justify-center px-4 text-center md:px-6">
           <div className="space-y-3">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
@@ -61,8 +59,8 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center gap-4 px-4 text-center md:px-6 ">
+      </div> */}
+      <div className="flex  justify-center gap-4 px-4 text-center md:px-6 ">
         <div className="flex flex-col flex-1">
           <form className="flex flex-col items-center gap-3">
             <div className="space-y-2">
@@ -175,6 +173,6 @@ export default function Home() {
         isLoginOpen={isLoginOpen}
         setIsLoginOpen={setIsLoginOpen}
       />
-    </>
+    </div>
   );
 }
