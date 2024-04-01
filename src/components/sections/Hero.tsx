@@ -1,12 +1,12 @@
 import Image from "next/image";
 import React from "react";
-import imageBg from "@/assets/bg.jpg";
+import heroImg from "@/assets/heroImage.png";
 import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
     <div className="h-screen flex my-[5%]">
-      <div className="flex-1 flex flex-col items-center gap-5">
+      <div className="flex-1 flex flex-col items-center gap-5 my-[100px]">
         <h1 className="text-[56px] font-extrabold text-center text-gray-200">
           AI Generated Social Media Content ideas
         </h1>
@@ -20,14 +20,13 @@ const Hero = () => {
         </h3>
         <Button className="my-6">Start generating</Button>
       </div>
-      <div className="flex-1">
+      <div className="flex flex-1 justify-center items-start">
         <Image
-          src={imageBg}
+          src={heroImg}
           priority
           alt="img-test"
-          width={500}
-          height={500}
-          objectFit="cover"
+          objectFit="contain"
+          className="w-[400px]"
         />
       </div>
     </div>
