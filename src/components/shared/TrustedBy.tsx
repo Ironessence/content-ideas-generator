@@ -18,7 +18,7 @@ const TrustedBy = () => {
             width={40}
             height={40}
             priority
-            className="rounded-[50%]"
+            className="rounded-[50%] min-w-[30px] min-h-[30px]"
           />
         </div>
 
@@ -29,7 +29,7 @@ const TrustedBy = () => {
             width={40}
             height={40}
             priority
-            className="rounded-[50%]"
+            className="rounded-[50%] min-w-[30px] min-h-[30px]"
           />
         </div>
         <div className="rounded-[50%] p-[3px] bg-slate-50 ml-[-25px] flex ">
@@ -39,7 +39,7 @@ const TrustedBy = () => {
             width={40}
             height={40}
             priority
-            className="rounded-[50%]"
+            className="rounded-[50%] min-w-[30px] min-h-[30px]"
           />
         </div>
         <div className="rounded-[50%] p-[3px] bg-slate-50 ml-[-25px] flex ">
@@ -49,11 +49,11 @@ const TrustedBy = () => {
             width={40}
             height={40}
             priority
-            className="rounded-[50%]"
+            className="rounded-[50%] min-w-[30px] min-h-[30px]"
           />
         </div>
       </div>
-      <div>
+      <div className="ml-2">
         <div className="flex items-center gap-0">
           <Image
             src={star}

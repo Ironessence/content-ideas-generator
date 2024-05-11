@@ -5,8 +5,16 @@ import { Button } from "../ui/button";
 import arrow from "@/assets/icons/right-arrow.png";
 import checkmark from "@/assets/icons/checkmark.png";
 import TrustedBy from "../shared/TrustedBy";
+import { useUserContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
-const Hero = () => {
+interface HeroProps {
+  setIsLoginOpen: (value: boolean) => void;
+}
+
+const Hero = ({ setIsLoginOpen }: HeroProps) => {
+  const { user } = useUserContext();
+  const router = useRouter();
   return (
     <div className="h-screen flex my-[5%] px-[150px]">
       <div className="flex-1 flex flex-col items-center gap-5 my-[100px]  ">
@@ -52,7 +60,16 @@ const Hero = () => {
           <TrustedBy />
         </div>
 
-        <Button className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-pink-500 hover:bg-pink-500">
+        <Button
+          className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-pink-500 hover:bg-pink-500"
+          onClick={() => {
+            if (!user) {
+              setIsLoginOpen(true);
+            } else {
+              router.push("/generate");
+            }
+          }}
+        >
           Try it out
           <Image
             src={arrow}

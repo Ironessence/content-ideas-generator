@@ -5,6 +5,8 @@ import { useUserContext } from "@/context/AuthContext";
 
 const AvatarComponent = () => {
   const { user } = useUserContext();
+
+  if (!user) return null;
   return (
     <Avatar className="cursor-pointer">
       <AvatarImage

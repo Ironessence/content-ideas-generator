@@ -16,18 +16,18 @@ const SignInDialog = ({ isLoginOpen, setIsLoginOpen }: SignInDialogProps) => {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-[24px] font-bold text-center mr-5">
+          <DialogTitle className="text-[24px] font-bold text-center mr-5 text-gray-700">
             <span className="text-[32px]">👋</span> Hey there!{" "}
           </DialogTitle>
           <DialogDescription className="flex flex-col">
             It looks like you are not logged in. Please log in or sign up below to start generating
-            ideas.
+            content & ideas.
             <Button
               onClick={(e) => {
                 e.preventDefault();
                 signIn("google", { callbackUrl: "/" });
               }}
-              className="hover:bg-purple-900 mt-5 w-auto"
+              className="hover:bg-pink-500 mt-5 w-[200px] mr-auto ml-auto"
             >
               Log in with Google
             </Button>
