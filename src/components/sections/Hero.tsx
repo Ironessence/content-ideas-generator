@@ -3,25 +3,56 @@ import React from "react";
 import heroImg from "@/assets/heroImage.png";
 import { Button } from "../ui/button";
 import arrow from "@/assets/icons/right-arrow.png";
+import checkmark from "@/assets/icons/checkmark.png";
+import TrustedBy from "../shared/TrustedBy";
 
 const Hero = () => {
   return (
-    <div className="h-screen flex my-[5%] px-10">
-      <div className="flex-1 flex flex-col items-center gap-5 my-[100px]">
-        <h1 className="text-[56px] font-extrabold text-center text-gray-200">
-          <span className="font-extrabold text-green-400 drop-shadow-xl">Quality</span> AI-Generated
-          Social Media Content
+    <div className="h-screen flex my-[5%] px-[150px]">
+      <div className="flex-1 flex flex-col items-center gap-5 my-[100px]  ">
+        <h1 className="text-[56px] font-extrabold  text-gray-200 drop-shadow-lg">
+          Create <span className="text-pink-500">Quality</span> Social Media Content in{" "}
+          <span className="bg-pink-500 p-1 px-2">Minutes</span>
         </h1>
-        <h2 className="text-xl font-medium text-center text-gray-200">
-          Viral ideas & complete scripts, generated in under{" "}
-          <span className="font-extrabold text-green-400 drop-shadow-xl">2 minutes</span>.
-        </h2>
-        <h3 className="text-lg font-medium text-center text-gray-300">
-          with a focus on{" "}
-          <span className="font-extrabold text-green-400 drop-shadow-xl">quality, creativity,</span>{" "}
-          and <span className="font-extrabold text-green-400 drop-shadow-xl">engagement</span>.
-        </h3>
-        <Button className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200">
+
+        <div className="flex flex-col gap-2 mr-auto">
+          <div className="flex items-center justify-center gap-1">
+            <Image
+              src={checkmark}
+              alt="checkmark"
+              width={20}
+              height={20}
+              priority
+            />
+            <h3>Trained to generate viral ideas & content</h3>
+          </div>
+          <div className="flex items-center justify-left gap-1">
+            <Image
+              src={checkmark}
+              alt="checkmark"
+              width={20}
+              height={20}
+              priority
+            />
+            <h3>Saves hours of your time</h3>
+          </div>
+          <div className="flex items-center justify-left gap-1">
+            <Image
+              src={checkmark}
+              alt="checkmark"
+              width={20}
+              height={20}
+              priority
+            />
+            <h3>Advanced configurability</h3>
+          </div>
+        </div>
+
+        <div className="mr-auto mt-5">
+          <TrustedBy />
+        </div>
+
+        <Button className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-pink-500 hover:bg-pink-500">
           Try it out
           <Image
             src={arrow}
