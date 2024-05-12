@@ -1,19 +1,7 @@
 "use client";
 import GenerationForm from "@/components/shared/GenerationForm";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useUserContext } from "@/context/AuthContext";
-import { DataType } from "@/types/idea.types";
-import React, { FormEvent, useState } from "react";
+import React from "react";
 
 const Generate = () => {
   const { user } = useUserContext();
