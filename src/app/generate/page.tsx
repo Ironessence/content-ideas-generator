@@ -28,9 +28,9 @@ const Generate = () => {
   return (
     <div>
       <h1 className="text-center text-[26px] font-bold">Content generation</h1>
-      <div className="flex items-start justify-start w-[100%] h-screen p-5 rounded-xl">
-        <div className="flex-1 flex flex-col">
-          <h2 className="text-center">Select options:</h2>
+      <div className="flex flex-col items-start justify-start w-[100%] h-screen p-5 rounded-xl">
+        <div className="flex-1 flex-col flex  w-full">
+          <h2 className="text-center font-semibold">Select options:</h2>
           <GenerationForm />
         </div>
         <div className="flex-1">
