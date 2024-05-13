@@ -36,3 +36,15 @@ export const youtubeContentType = [
     image: "/assets/icons/yt-shorts.png",
   },
 ];
+
+export const numberOfIdeas = [
+  {
+    title: "3",
+  },
+  {
+    title: "5",
+  },
+  {
+    title: "10",
+  },
+];

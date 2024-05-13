@@ -5,17 +5,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { Button } from "../ui/button";
 import GenerationFormField from "./GenerationFormField";
-import { instagramContentType, platformData, youtubeContentType } from "../../utils/generationData";
+import {
+  instagramContentType,
+  numberOfIdeas,
+  platformData,
+  youtubeContentType,
+} from "../../utils/generationData";
 import ChoiceCard from "./ChoiceCard";
+import { Input } from "../ui/input";
 
 const GenerationForm = () => {
   const formSchema = z.object({
     platform: z.string(),
     contentType: z.string(),
+    numberOf: z.number(),
+    niche: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      niche: "",
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -29,6 +40,14 @@ const GenerationForm = () => {
     form.resetField("contentType");
   };
 
+  const handleSelectContentType = (contentType: string) => {
+    form.setValue("contentType", contentType);
+  };
+
+  const handleSelectNumberOfIdeas = (numberOf: number) => {
+    form.setValue("numberOf", numberOf);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -38,7 +57,7 @@ const GenerationForm = () => {
         {/* PLATFORM */}
         <GenerationFormField
           form={form}
-          title="Platform:"
+          title="Platform"
           name="platform"
           choices={platformData.map((item) => (
             <ChoiceCard
@@ -47,6 +66,7 @@ const GenerationForm = () => {
               key={item.title}
               onSelect={handleSelectPlatform}
               form={form}
+              formFieldName="platform"
             />
           ))}
         />
@@ -55,7 +75,7 @@ const GenerationForm = () => {
         {form.watch("platform") != null && (
           <GenerationFormField
             form={form}
-            title="Content Type:"
+            title="Content Type"
             name="contentType"
             choices={
               form.watch("platform") === "Instagram"
@@ -64,8 +84,9 @@ const GenerationForm = () => {
                       image={item.image}
                       title={item.title}
                       key={item.title}
-                      onSelect={(choice) => form.setValue("contentType", choice)}
+                      onSelect={handleSelectContentType}
                       form={form}
+                      formFieldName="contentType"
                     />
                   ))
                 : youtubeContentType.map((item) => (
@@ -73,10 +94,44 @@ const GenerationForm = () => {
                       image={item.image}
                       title={item.title}
                       key={item.title}
-                      onSelect={(choice) => form.setValue("contentType", choice)}
+                      onSelect={handleSelectContentType}
                       form={form}
+                      formFieldName="contentType"
                     />
                   ))
+            }
+          />
+        )}
+
+        {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Number of Ideas to Generate"
+            name="numberOf"
+            choices={numberOfIdeas.map((item) => (
+              <ChoiceCard
+                title={item.title}
+                key={item.title}
+                onSelect={handleSelectNumberOfIdeas}
+                form={form}
+                formFieldName="numberOf"
+              />
+            ))}
+          />
+        )}
+
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Niche"
+            name="niche"
+            formField={
+              <Input
+                value={form.watch("niche")}
+                onChange={(e) => form.setValue("niche", e.target.value)}
+                placeholder="e.g. Video Games"
+              />
             }
           />
         )}
