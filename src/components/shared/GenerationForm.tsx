@@ -1,6 +1,6 @@
-import React from "react";
+import React, { FormEvent, useEffect } from "react";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { Button } from "../ui/button";
@@ -9,31 +9,44 @@ import {
   instagramContentType,
   numberOfIdeas,
   platformData,
+  toneType,
   youtubeContentType,
 } from "../../utils/generationData";
 import ChoiceCard from "./ChoiceCard";
 import { Input } from "../ui/input";
+import { LoaderIcon } from "lucide-react";
 
-const GenerationForm = () => {
+interface GenerationFormProps {
+  onSubmit: (form: UseFormReturn<any>) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+}
+
+const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormProps) => {
   const formSchema = z.object({
     platform: z.string(),
     contentType: z.string(),
     numberOf: z.number(),
+    toneType: z.string(),
     niche: z.string(),
+    keywords: z.string(),
+    additionalInfo: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      numberOf: 3,
+      toneType: "None",
       niche: "",
+      keywords: "",
+      additionalInfo: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const handleFormSubmit = () => {
+    onSubmit(form);
+  };
 
   const handleSelectPlatform = (platform: string) => {
     form.setValue("platform", platform);
@@ -48,10 +61,14 @@ const GenerationForm = () => {
     form.setValue("numberOf", numberOf);
   };
 
+  const handleSelectToneType = (toneType: string) => {
+    form.setValue("toneType", toneType);
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleFormSubmit)}
         className="space-y-8 text-black"
       >
         {/* PLATFORM */}
@@ -124,6 +141,24 @@ const GenerationForm = () => {
         {form.watch("contentType") != null && (
           <GenerationFormField
             form={form}
+            title="Tone"
+            name="toneType"
+            choices={toneType.map((item) => (
+              <ChoiceCard
+                image={item.image}
+                title={item.title}
+                key={item.title}
+                onSelect={handleSelectToneType}
+                form={form}
+                formFieldName="toneType"
+              />
+            ))}
+          />
+        )}
+
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
             title="Niche"
             name="niche"
             formField={
@@ -136,7 +171,43 @@ const GenerationForm = () => {
           />
         )}
 
-        <Button type="submit">Submit</Button>
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Keywords"
+            name="keywords"
+            formField={
+              <Input
+                value={form.watch("keywords")}
+                onChange={(e) => form.setValue("keywords", e.target.value)}
+                placeholder="e.g. Fortnite, League of Legends, Call of Duty"
+              />
+            }
+          />
+        )}
+
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Additional information"
+            name="additionalInfo"
+            formField={
+              <Input
+                value={form.watch("additionalInfo")}
+                onChange={(e) => form.setValue("additionalInfo", e.target.value)}
+                placeholder="e.g. List interesting facts about Call of Duty"
+              />
+            }
+          />
+        )}
+
+        <Button
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading && <LoaderIcon />}
+          Submit
+        </Button>
       </form>
     </Form>
   );

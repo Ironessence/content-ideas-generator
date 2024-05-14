@@ -4,7 +4,7 @@ export type DataType = {
 
 export type IdeaType = {
   id: number;
-  hook: string;
   idea: string;
   viralityScore: number;
+  shortDescription: string;
 };

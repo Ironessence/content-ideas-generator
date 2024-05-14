@@ -25,8 +25,8 @@ const GenerationFormField = ({
       render={() => (
         <FormItem>
           <FormLabel className="text-white">{title}</FormLabel>
-          <div className="flex gap-3">{choices}</div>
-          {formField}
+          <div className="flex gap-3 flex-wrap">{choices}</div>
+          {formField ?? null}
         </FormItem>
       )}
     />
