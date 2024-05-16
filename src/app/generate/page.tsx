@@ -46,15 +46,19 @@ const Generate = () => {
           />
         </div>
         <div className="flex-1 mt-10">
-          <h2 className="text-center">Results:</h2>
-          {data &&
-            data.ideas.length > 0 &&
-            data.ideas.map((idea) => (
-              <GeneratedIdea
-                key={idea.id}
-                idea={idea}
-              />
-            ))}
+          <h2 className="text-center font-semibold">Results:</h2>
+          <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4">
+            {data && data.ideas.length > 0 ? (
+              data.ideas.map((idea) => (
+                <GeneratedIdea
+                  key={idea.id}
+                  idea={idea}
+                />
+              ))
+            ) : (
+              <h2>This list is empty.</h2>
+            )}
+          </div>
         </div>
       </div>
     </div>

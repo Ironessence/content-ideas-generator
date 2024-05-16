@@ -3,14 +3,15 @@ import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
 interface ChoiceCardProps {
-  image?: string;
   title: string | number;
+  image?: string;
   onSelect: (choice: any) => void;
   form: UseFormReturn<any>;
   formFieldName: string;
+  fontSize?: number;
 }
 
-const ChoiceCard = ({ image, title, onSelect, form, formFieldName }: ChoiceCardProps) => {
+const ChoiceCard = ({ image, title, onSelect, form, formFieldName, fontSize }: ChoiceCardProps) => {
   return (
     <div
       key={title}
@@ -29,9 +30,11 @@ const ChoiceCard = ({ image, title, onSelect, form, formFieldName }: ChoiceCardP
       )}
       <span
         className={
-          image == null
-            ? "text-white text-center text-[24px] font-bold"
-            : "text-white text-center text-[13px] font-semibold"
+          !fontSize
+            ? image == null
+              ? "text-white text-center text-[24px] font-bold"
+              : "text-white text-center text-[13px] font-semibold"
+            : `text-white text-center font-semibold text-[${fontSize}px]`
         }
       >
         {typeof title === "number" ? String(title) : title}

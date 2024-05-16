@@ -1,14 +1,3 @@
-export const platformData = [
-  {
-    title: "Instagram",
-    image: "/assets/icons/insta.png",
-  },
-  {
-    title: "YouTube",
-    image: "/assets/icons/youtube.png",
-  },
-];
-
 export const instagramContentType = [
   {
     title: "Reel",
@@ -17,21 +6,6 @@ export const instagramContentType = [
   {
     title: "Post",
     image: "/assets/icons/post2.png",
-  },
-  {
-    title: "Story",
-    image: "/assets/icons/story.png",
-  },
-];
-
-export const youtubeContentType = [
-  {
-    title: "Video",
-    image: "/assets/icons/yt-video.png",
-  },
-  {
-    title: "Shots",
-    image: "/assets/icons/yt-shorts.png",
   },
 ];
 
@@ -68,8 +42,19 @@ export const toneType = [
     title: "Ironic",
     image: "/assets/icons/tone-ironic.png",
   },
+];
+
+export const videoLengthType = [
   {
-    title: "Relaxed",
-    image: "/assets/icons/tone-relaxed.png",
+    title: "0-15 seconds",
+  },
+  {
+    title: "15-30 seconds",
+  },
+  {
+    title: "30-45 seconds",
+  },
+  {
+    title: "45-60 seconds",
   },
 ];

@@ -7,4 +7,5 @@ export type IdeaType = {
   idea: string;
   viralityScore: number;
   shortDescription: string;
+  script?: string;
 };

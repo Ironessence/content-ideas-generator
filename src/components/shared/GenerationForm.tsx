@@ -8,13 +8,13 @@ import GenerationFormField from "./GenerationFormField";
 import {
   instagramContentType,
   numberOfIdeas,
-  platformData,
   toneType,
-  youtubeContentType,
+  videoLengthType,
 } from "../../utils/generationData";
 import ChoiceCard from "./ChoiceCard";
 import { Input } from "../ui/input";
 import { LoaderIcon } from "lucide-react";
+import CustomLoader from "./Loader/CustomLoader";
 
 interface GenerationFormProps {
   onSubmit: (form: UseFormReturn<any>) => void;
@@ -24,10 +24,10 @@ interface GenerationFormProps {
 
 const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormProps) => {
   const formSchema = z.object({
-    platform: z.string(),
     contentType: z.string(),
     numberOf: z.number(),
     toneType: z.string(),
+    videoLength: z.string(),
     niche: z.string(),
     keywords: z.string(),
     additionalInfo: z.string().optional(),
@@ -41,16 +41,12 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
       niche: "",
       keywords: "",
       additionalInfo: "",
+      videoLength: "0-15 seconds",
     },
   });
 
   const handleFormSubmit = () => {
     onSubmit(form);
-  };
-
-  const handleSelectPlatform = (platform: string) => {
-    form.setValue("platform", platform);
-    form.resetField("contentType");
   };
 
   const handleSelectContentType = (contentType: string) => {
@@ -65,60 +61,32 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     form.setValue("toneType", toneType);
   };
 
+  const handleSelectVideoLengthType = (videoLength: string) => {
+    form.setValue("videoLength", videoLength);
+  };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
         className="space-y-8 text-black"
       >
-        {/* PLATFORM */}
+        {/* CONTENT TYPE */}
         <GenerationFormField
           form={form}
-          title="Platform"
-          name="platform"
-          choices={platformData.map((item) => (
+          title="Content Type"
+          name="contentType"
+          choices={instagramContentType.map((item) => (
             <ChoiceCard
               image={item.image}
               title={item.title}
               key={item.title}
-              onSelect={handleSelectPlatform}
+              onSelect={handleSelectContentType}
               form={form}
-              formFieldName="platform"
+              formFieldName="contentType"
             />
           ))}
         />
-
-        {/* CONTENT TYPE */}
-        {form.watch("platform") != null && (
-          <GenerationFormField
-            form={form}
-            title="Content Type"
-            name="contentType"
-            choices={
-              form.watch("platform") === "Instagram"
-                ? instagramContentType.map((item) => (
-                    <ChoiceCard
-                      image={item.image}
-                      title={item.title}
-                      key={item.title}
-                      onSelect={handleSelectContentType}
-                      form={form}
-                      formFieldName="contentType"
-                    />
-                  ))
-                : youtubeContentType.map((item) => (
-                    <ChoiceCard
-                      image={item.image}
-                      title={item.title}
-                      key={item.title}
-                      onSelect={handleSelectContentType}
-                      form={form}
-                      formFieldName="contentType"
-                    />
-                  ))
-            }
-          />
-        )}
 
         {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
         {form.watch("contentType") != null && (
@@ -151,6 +119,24 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
                 onSelect={handleSelectToneType}
                 form={form}
                 formFieldName="toneType"
+              />
+            ))}
+          />
+        )}
+
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Video Length"
+            name="videoLength"
+            choices={videoLengthType.map((item) => (
+              <ChoiceCard
+                title={item.title}
+                key={item.title}
+                onSelect={handleSelectVideoLengthType}
+                form={form}
+                formFieldName="videoLength"
+                fontSize={10}
               />
             ))}
           />
@@ -204,9 +190,10 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
         <Button
           type="submit"
           disabled={isLoading}
+          className="flex items-center justify-center gap-2"
         >
-          {isLoading && <LoaderIcon />}
-          Submit
+          {isLoading && <CustomLoader />}
+          {isLoading ? "Generating..." : "Generate"}
         </Button>
       </form>
     </Form>
