@@ -4,6 +4,7 @@ import heartEmpty from "@/assets/icons/heart-empty.png";
 import heartFilled from "@/assets/icons/heart-filled.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import coin from "@/assets/icons/icon-coin.png";
 
 interface GeneratedIdeaProps {
   idea: IdeaType;
@@ -36,7 +37,18 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
       )}
       <div className="flex items-center justify-end">
         <Button className="bg-gray-500">
-          {idea.script ? "Regenerate script" : "Generate script"}
+          <h2 className="mr-1">{idea.script ? "Regenerate script" : "Generate script"}</h2>
+          <div className="flex items-center justify-center gap-1">
+            <Image
+              src={coin}
+              alt="coin"
+              width={25}
+              height={25}
+              priority
+              className="object-fit"
+            />
+            <h3>50</h3>
+          </div>
         </Button>
       </div>
     </div>
