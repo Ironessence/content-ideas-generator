@@ -29,10 +29,6 @@ const Generate = () => {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(() => {
-    console.log("DATA.IDEAS:", data && data.ideas && data.ideas.length > 0 && data.ideas);
-  }, []);
-
   return (
     <div>
       <h1 className="text-center text-[26px] font-bold">✨ Content generation</h1>
