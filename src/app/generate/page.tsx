@@ -30,7 +30,7 @@ const Generate = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-[calc(100vh-70px)]">
       <h1 className="text-center text-[26px] font-bold">✨ Content generation</h1>
       <div className="flex flex-col items-start justify-start w-[100%] p-5 rounded-xl">
         <div className="flex-1 flex-col flex w-full">
@@ -41,7 +41,7 @@ const Generate = () => {
             setIsLoading={setIsLoading}
           />
         </div>
-        <div className="flex-1 mt-10">
+        <div className="flex-1 mt-10 w-full">
           <h2 className="text-center font-semibold">Results:</h2>
           <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4">
             {data && data.ideas.length > 0 ? (

@@ -2,6 +2,7 @@
 import React from "react";
 import AvatarComponent from "./AvatarComponent";
 import { useRouter } from "next/navigation";
+import NavbarUserInfo from "./NavbarUserInfo";
 
 const Navbar = () => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const Navbar = () => {
         <h2 className={`font-sans text-2xl font-extrabold tracking-widest text-white`}>IdeaFizz</h2>
       </div>
       <div className="h-auto w-auto">
-        <AvatarComponent />
+        <NavbarUserInfo />
       </div>
     </div>
   );

@@ -84,8 +84,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
           src={heroImg}
           priority
           alt="img-test"
-          objectFit="contain"
-          className="w-[400px]"
+          className="w-[400px] object-fit"
         />
       </div>
     </div>
