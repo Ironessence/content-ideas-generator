@@ -19,17 +19,19 @@ const GenerationFormField = ({
   formField,
 }: GenerationFormFieldProps) => {
   return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={() => (
-        <FormItem>
-          <FormLabel className="text-white">{title}</FormLabel>
-          <div className="flex gap-3 flex-wrap">{choices}</div>
-          {formField ?? null}
-        </FormItem>
-      )}
-    />
+    <div className="border-[1px] border-gray-600 p-2 rounded-xl">
+      <FormField
+        control={form.control}
+        name={name}
+        render={() => (
+          <FormItem>
+            <FormLabel className="text-white">{title}</FormLabel>
+            <div className="flex gap-3 flex-wrap">{choices}</div>
+            {formField ?? null}
+          </FormItem>
+        )}
+      />
+    </div>
   );
 };
 

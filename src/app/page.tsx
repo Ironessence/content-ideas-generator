@@ -8,7 +8,7 @@ export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
-    <div className="h-full w-full ">
+    <div className="h-[calc(100vh-70px)] w-full ">
       <Hero setIsLoginOpen={setIsLoginOpen} />
       <SignInDialog
         isLoginOpen={isLoginOpen}

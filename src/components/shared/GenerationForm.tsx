@@ -5,15 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { Button } from "../ui/button";
 import GenerationFormField from "./GenerationFormField";
-import {
-  instagramContentType,
-  numberOfIdeas,
-  toneType,
-  videoLengthType,
-} from "../../utils/generationData";
+import { instagramContentType, toneType, videoLengthType } from "../../utils/generationData";
 import ChoiceCard from "./ChoiceCard";
 import { Input } from "../ui/input";
-import { LoaderIcon } from "lucide-react";
 import CustomLoader from "./Loader/CustomLoader";
 
 interface GenerationFormProps {
@@ -25,7 +19,6 @@ interface GenerationFormProps {
 const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormProps) => {
   const formSchema = z.object({
     contentType: z.string(),
-    numberOf: z.number(),
     toneType: z.string(),
     videoLength: z.string(),
     niche: z.string(),
@@ -36,7 +29,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      numberOf: 3,
       toneType: "None",
       niche: "",
       keywords: "",
@@ -53,10 +45,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     form.setValue("contentType", contentType);
   };
 
-  const handleSelectNumberOfIdeas = (numberOf: number) => {
-    form.setValue("numberOf", numberOf);
-  };
-
   const handleSelectToneType = (toneType: string) => {
     form.setValue("toneType", toneType);
   };
@@ -69,7 +57,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="space-y-8 text-black"
+        className=" text-black flex items-start flex-wrap gap-5"
       >
         {/* CONTENT TYPE */}
         <GenerationFormField
@@ -89,22 +77,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
         />
 
         {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Number of Ideas to Generate"
-            name="numberOf"
-            choices={numberOfIdeas.map((item) => (
-              <ChoiceCard
-                title={item.title}
-                key={item.title}
-                onSelect={handleSelectNumberOfIdeas}
-                form={form}
-                formFieldName="numberOf"
-              />
-            ))}
-          />
-        )}
 
         {form.watch("contentType") != null && (
           <GenerationFormField

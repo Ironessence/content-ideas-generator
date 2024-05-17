@@ -34,7 +34,7 @@ const Generate = () => {
       <h1 className="text-center text-[26px] font-bold">✨ Content generation</h1>
       <div className="flex flex-col items-start justify-start w-[100%] p-5 rounded-xl">
         <div className="flex-1 flex-col flex w-full">
-          <h2 className="text-center font-semibold">Configure generation options:</h2>
+          <h2 className="text-center font-semibold mb-10">Configure generation options:</h2>
           <GenerationForm
             onSubmit={handleSubmit}
             isLoading={isLoading}

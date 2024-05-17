@@ -9,18 +9,6 @@ export const instagramContentType = [
   },
 ];
 
-export const numberOfIdeas = [
-  {
-    title: 3,
-  },
-  {
-    title: 5,
-  },
-  {
-    title: 10,
-  },
-];
-
 export const toneType = [
   {
     title: "None",

@@ -16,7 +16,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div className="h-screen flex my-[5%] px-[150px]">
+    <div className=" flex my-[5%] px-[150px]">
       <div className="flex-1 flex flex-col items-center gap-5 my-[100px]  ">
         <h1 className="text-[56px] font-extrabold  text-gray-200 drop-shadow-lg">
           Create <span className="text-pink-500">Quality</span> Social Media Content in{" "}
