@@ -14,6 +14,7 @@ import {
 import { Input } from "../ui/input";
 import CustomLoader from "./Loader/CustomLoader";
 import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 interface GenerationFormProps {
   onSubmit: (form: UseFormReturn<any>) => void;
@@ -69,113 +70,117 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="text-black flex flex-col gap-2 w-full"
+        className="text-black flex flex-col gap-2 w-full md:items-center  "
       >
-        {/* CONTENT TYPE */}
-        <GenerationFormField
-          form={form}
-          title="Content Type"
-          name="contentType"
-          choices={instagramContentType.map((item) => item.title)}
-          onChange={handleSelectContentType}
-        />
-
-        {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
-
-        {form.watch("contentType") != null && (
+        <div className="flex flex-wrap gap-5 items-center ">
+          {/* CONTENT TYPE */}
           <GenerationFormField
             form={form}
-            title="Tone"
-            name="toneType"
-            choices={toneType.map((item) => item.title)}
-            onChange={handleSelectToneType}
+            title="Content Type"
+            name="contentType"
+            choices={instagramContentType.map((item) => item.title)}
+            onChange={handleSelectContentType}
           />
-        )}
 
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Video Length"
-            name="videoLength"
-            choices={videoLengthType.map((item) => item.title)}
-            onChange={handleSelectVideoLengthType}
-          />
-        )}
+          {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
 
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Optimize for"
-            name="optimizeFor"
-            choices={optimizeForType.map((item) => item.title)}
-            onChange={handleSelectOptimizeFor}
-          />
-        )}
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Tone"
+              name="toneType"
+              choices={toneType.map((item) => item.title)}
+              onChange={handleSelectToneType}
+            />
+          )}
 
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Niche"
-            name="niche"
-            onChange={(value) => form.setValue("niche", value)}
-            formField={
-              <>
-                <Label className="text-white">Niche</Label>
-                <Input
-                  value={form.watch("niche")}
-                  onChange={(e) => form.setValue("niche", e.target.value)}
-                  placeholder="e.g. Video Games"
-                  className="w-[300px]"
-                />
-              </>
-            }
-          />
-        )}
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Video Length"
+              name="videoLength"
+              choices={videoLengthType.map((item) => item.title)}
+              onChange={handleSelectVideoLengthType}
+            />
+          )}
 
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Keywords"
-            name="keywords"
-            onChange={(value) => form.setValue("keywords", value)}
-            formField={
-              <>
-                <Label className="text-white">Keywords</Label>
-                <Input
-                  value={form.watch("keywords")}
-                  onChange={(e) => form.setValue("keywords", e.target.value)}
-                  placeholder="e.g. Fortnite, League of Legends, Call of Duty"
-                  className="w-[300px]"
-                />
-              </>
-            }
-          />
-        )}
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Optimize for"
+              name="optimizeFor"
+              choices={optimizeForType.map((item) => item.title)}
+              onChange={handleSelectOptimizeFor}
+            />
+          )}
+        </div>
 
-        {form.watch("contentType") != null && (
-          <GenerationFormField
-            form={form}
-            title="Additional information"
-            name="additionalInfo"
-            onChange={(value) => form.setValue("additionalInfo", value)}
-            formField={
-              <>
-                <Label className="text-white">Additional info</Label>
-                <Input
-                  value={form.watch("additionalInfo")}
-                  onChange={(e) => form.setValue("additionalInfo", e.target.value)}
-                  placeholder="e.g. List interesting facts about Call of Duty"
-                  className="w-[300px]"
-                />
-              </>
-            }
-          />
-        )}
+        <div>
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Niche"
+              name="niche"
+              onChange={(value) => form.setValue("niche", value)}
+              formField={
+                <>
+                  <Label className="text-white">Niche</Label>
+                  <Input
+                    value={form.watch("niche")}
+                    onChange={(e) => form.setValue("niche", e.target.value)}
+                    placeholder="e.g. Video Games"
+                    className="max-w-[350px] min-w-[300px]"
+                  />
+                </>
+              }
+            />
+          )}
+
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Keywords"
+              name="keywords"
+              onChange={(value) => form.setValue("keywords", value)}
+              formField={
+                <>
+                  <Label className="text-white">Keywords</Label>
+                  <Input
+                    value={form.watch("keywords")}
+                    onChange={(e) => form.setValue("keywords", e.target.value)}
+                    placeholder="e.g. Fortnite, League of Legends, Call of Duty"
+                    className="max-w-[350px] min-w-[300px]"
+                  />
+                </>
+              }
+            />
+          )}
+
+          {form.watch("contentType") != null && (
+            <GenerationFormField
+              form={form}
+              title="Additional information"
+              name="additionalInfo"
+              onChange={(value) => form.setValue("additionalInfo", value)}
+              formField={
+                <>
+                  <Label className="text-white">Additional info</Label>
+                  <Textarea
+                    value={form.watch("additionalInfo")}
+                    onChange={(e) => form.setValue("additionalInfo", e.target.value)}
+                    placeholder="e.g. List interesting facts about Call of Duty"
+                    className="resize-none max-w-[350px] min-w-[300px]"
+                  />
+                </>
+              }
+            />
+          )}
+        </div>
         <div>
           <Button
             type="submit"
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 self-center mt-5"
+            className="flex items-center justify-center gap-2 self-center mt-5 bg-pink-500 hover:bg-pink-600 "
           >
             {isLoading && <CustomLoader />}
             {isLoading ? "Generating..." : "Generate ✨"}

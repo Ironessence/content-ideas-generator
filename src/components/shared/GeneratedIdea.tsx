@@ -36,7 +36,7 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
   };
 
   return (
-    <div className="border-2 border-gray-400 rounded-xl p-5 ">
+    <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] ">
       <Image
         src={isLiked ? heartFilled : heartEmpty}
         alt="heart icon"

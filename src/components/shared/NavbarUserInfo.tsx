@@ -10,7 +10,7 @@ import { useUserContext } from "@/context/AuthContext";
 
 const NavbarUserInfo = () => {
   const { user } = useUserContext();
-  if (!user) return null;
+
   return (
     <div className="flex items-center justify-center gap-2">
       <Link href="/buy-tokens">
@@ -30,15 +30,17 @@ const NavbarUserInfo = () => {
           />
         </div>
       </Link>
-      <div className="flex items-center justify-center gap-1 bg-slate-800 py-1 px-2 rounded-xl">
-        <h3 className="font-bold text-[18px]">{user.tokens}</h3>
-        <Image
-          src={token}
-          alt="tokens"
-          width={25}
-          height={25}
-        />
-      </div>
+      {user && (
+        <div className="flex items-center justify-center gap-1 bg-slate-800 py-1 px-2 rounded-xl">
+          <h3 className="font-bold text-[18px]">{user.tokens}</h3>
+          <Image
+            src={token}
+            alt="tokens"
+            width={25}
+            height={25}
+          />
+        </div>
+      )}
       <AvatarComponent />
     </div>
   );

@@ -40,7 +40,7 @@ const GenerationFormField = ({
                 onValueChange={(value) => onChange(value)}
                 value={form.watch(name)}
               >
-                <SelectTrigger className="w-[180px] bg-slate-600 text-white focus:text-white border-slate-600">
+                <SelectTrigger className="w-[150px] bg-slate-600 text-white focus:text-white border-slate-600">
                   <SelectValue placeholder={form.watch(name)} />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-600 text-white focus:text-white selection:text-white border-slate-800">
