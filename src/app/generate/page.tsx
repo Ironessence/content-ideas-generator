@@ -11,12 +11,20 @@ import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import { subtractUserTokens } from "@/lib/clientApi";
 import { constants } from "@/constants";
 import { toast, useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import PurchaseTokensDrawer from "@/components/shared/PurchaseTokensDrawer";
+import { Button } from "@/components/ui/button";
 
 const Generate = () => {
-  const { user } = useUserContext();
+  const { user, refreshUser } = useUserContext();
   const [data, setData] = useState<DataType | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPurchaseTokensModalOpen, setIsPurchaseTokensModalOpen] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    console.log("ISPURCHASEOPEN:", isPurchaseTokensModalOpen);
+  }, [isPurchaseTokensModalOpen]);
 
   if (!user) {
     return null;
@@ -45,36 +53,40 @@ const Generate = () => {
 
   const handleSubmit = async (form: UseFormReturn<any>) => {
     setIsLoading(true);
+    let sufficientTokens = true;
 
     await subtractUserTokens(user, constants.ideasPrice)
       .then((res) => console.log("RES:", res))
-
       .catch((err) => {
         console.log("err:", err);
-        toast({
-          title: "Not enough tokens!",
-          description: "You don't have enough tokens to generate ideas. Please buy more tokens.",
-        });
+        setIsPurchaseTokensModalOpen(true);
+        sufficientTokens = false;
+        setIsLoading(false);
         return;
       });
 
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-      .then(() =>
-        fetch("http://localhost:3000/api/test", {
-          method: "POST",
-          body: JSON.stringify(form.getValues()),
-        }),
-      )
-      .then((res) => {
-        console.log("RES:", res);
-        return res.clone().json();
-      })
-      .then((data) => {
-        console.log("DATA:", data);
-        setData(data);
-      })
-      .catch((err) => console.log("err:", err))
-      .finally(() => setIsLoading(false));
+    if (sufficientTokens) {
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+        .then(() =>
+          fetch("http://localhost:3000/api/test", {
+            method: "POST",
+            body: JSON.stringify(form.getValues()),
+          }),
+        )
+        .then((res) => {
+          console.log("RES:", res);
+          return res.clone().json();
+        })
+        .then((data) => {
+          console.log("DATA:", data);
+          setData(data);
+        })
+        .catch((err) => console.log("err:", err))
+        .finally(() => {
+          setIsLoading(false);
+          refreshUser();
+        });
+    }
   };
 
   return (
@@ -124,6 +136,10 @@ const Generate = () => {
           </div>
         </div>
       </div>
+      <PurchaseTokensDrawer
+        isOpen={isPurchaseTokensModalOpen}
+        setIsOpen={setIsPurchaseTokensModalOpen}
+      />
     </div>
   );
 };

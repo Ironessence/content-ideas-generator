@@ -18,11 +18,12 @@ export const getUserFromDb = async (email: string) => {
 };
 
 export const subtractUserTokens = async (user: IUser, tokens: number) => {
-  if (!user || user.tokens <= tokens) {
-    return null;
+  if (!user || user.tokens < tokens) {
+    throw new Error("Not enough tokens");
+    return;
   }
-
   try {
+    console.log("THIS RUNS ?");
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/usetokens`, {
       method: "PUT",
       body: JSON.stringify({ email: user.email, tokens }),
