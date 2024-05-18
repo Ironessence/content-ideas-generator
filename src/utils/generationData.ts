@@ -46,3 +46,21 @@ export const videoLengthType = [
     title: "45-60 seconds",
   },
 ];
+
+export const optimizeForType = [
+  {
+    title: "n/a",
+  },
+  {
+    title: "Likes",
+  },
+  {
+    title: "Comments",
+  },
+  {
+    title: "Shares",
+  },
+  {
+    title: "Saves",
+  },
+];

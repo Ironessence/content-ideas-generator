@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import AvatarComponent from "./AvatarComponent";
 import Image from "next/image";
@@ -5,8 +6,11 @@ import buyCoins from "@/assets/icons/buy-coins.png";
 import Link from "next/link";
 import token from "@/assets/icons/icon-coin.png";
 import add from "@/assets/icons/add.png";
+import { useUserContext } from "@/context/AuthContext";
 
 const NavbarUserInfo = () => {
+  const { user } = useUserContext();
+  if (!user) return null;
   return (
     <div className="flex items-center justify-center gap-2">
       <Link href="/buy-tokens">
@@ -27,7 +31,7 @@ const NavbarUserInfo = () => {
         </div>
       </Link>
       <div className="flex items-center justify-center gap-1 bg-slate-800 py-1 px-2 rounded-xl">
-        <h3 className="font-bold text-[18px]">100</h3>
+        <h3 className="font-bold text-[18px]">{user.tokens}</h3>
         <Image
           src={token}
           alt="tokens"

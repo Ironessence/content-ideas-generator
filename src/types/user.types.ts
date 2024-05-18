@@ -11,6 +11,6 @@ export type IUser = {
   __v: string;
   name: string;
   email: string;
-  diamonds: number;
+  tokens: number;
   image: string;
 };

@@ -5,10 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { Button } from "../ui/button";
 import GenerationFormField from "./GenerationFormField";
-import { instagramContentType, toneType, videoLengthType } from "../../utils/generationData";
+import {
+  instagramContentType,
+  optimizeForType,
+  toneType,
+  videoLengthType,
+} from "../../utils/generationData";
 import ChoiceCard from "./ChoiceCard";
 import { Input } from "../ui/input";
 import CustomLoader from "./Loader/CustomLoader";
+import { Label } from "../ui/label";
 
 interface GenerationFormProps {
   onSubmit: (form: UseFormReturn<any>) => void;
@@ -21,6 +27,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     contentType: z.string(),
     toneType: z.string(),
     videoLength: z.string(),
+    optimizeFor: z.string(),
     niche: z.string(),
     keywords: z.string(),
     additionalInfo: z.string().optional(),
@@ -30,10 +37,10 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     resolver: zodResolver(formSchema),
     defaultValues: {
       toneType: "None",
+      videoLength: "0-15 seconds",
       niche: "",
       keywords: "",
       additionalInfo: "",
-      videoLength: "0-15 seconds",
     },
   });
 
@@ -53,27 +60,23 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     form.setValue("videoLength", videoLength);
   };
 
+  const handleSelectOptimizeFor = (optimizeFor: string) => {
+    form.setValue("optimizeFor", optimizeFor);
+  };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        className=" text-black flex items-start flex-wrap gap-5"
+        className="text-black flex flex-col gap-2 w-full"
       >
         {/* CONTENT TYPE */}
         <GenerationFormField
           form={form}
           title="Content Type"
           name="contentType"
-          choices={instagramContentType.map((item) => (
-            <ChoiceCard
-              image={item.image}
-              title={item.title}
-              key={item.title}
-              onSelect={handleSelectContentType}
-              form={form}
-              formFieldName="contentType"
-            />
-          ))}
+          choices={instagramContentType.map((item) => item.title)}
+          onChange={handleSelectContentType}
         />
 
         {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
@@ -83,16 +86,8 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             form={form}
             title="Tone"
             name="toneType"
-            choices={toneType.map((item) => (
-              <ChoiceCard
-                image={item.image}
-                title={item.title}
-                key={item.title}
-                onSelect={handleSelectToneType}
-                form={form}
-                formFieldName="toneType"
-              />
-            ))}
+            choices={toneType.map((item) => item.title)}
+            onChange={handleSelectToneType}
           />
         )}
 
@@ -101,16 +96,18 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             form={form}
             title="Video Length"
             name="videoLength"
-            choices={videoLengthType.map((item) => (
-              <ChoiceCard
-                title={item.title}
-                key={item.title}
-                onSelect={handleSelectVideoLengthType}
-                form={form}
-                formFieldName="videoLength"
-                fontSize={10}
-              />
-            ))}
+            choices={videoLengthType.map((item) => item.title)}
+            onChange={handleSelectVideoLengthType}
+          />
+        )}
+
+        {form.watch("contentType") != null && (
+          <GenerationFormField
+            form={form}
+            title="Optimize for"
+            name="optimizeFor"
+            choices={optimizeForType.map((item) => item.title)}
+            onChange={handleSelectOptimizeFor}
           />
         )}
 
@@ -119,12 +116,17 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             form={form}
             title="Niche"
             name="niche"
+            onChange={(value) => form.setValue("niche", value)}
             formField={
-              <Input
-                value={form.watch("niche")}
-                onChange={(e) => form.setValue("niche", e.target.value)}
-                placeholder="e.g. Video Games"
-              />
+              <>
+                <Label className="text-white">Niche</Label>
+                <Input
+                  value={form.watch("niche")}
+                  onChange={(e) => form.setValue("niche", e.target.value)}
+                  placeholder="e.g. Video Games"
+                  className="w-[300px]"
+                />
+              </>
             }
           />
         )}
@@ -134,12 +136,17 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             form={form}
             title="Keywords"
             name="keywords"
+            onChange={(value) => form.setValue("keywords", value)}
             formField={
-              <Input
-                value={form.watch("keywords")}
-                onChange={(e) => form.setValue("keywords", e.target.value)}
-                placeholder="e.g. Fortnite, League of Legends, Call of Duty"
-              />
+              <>
+                <Label className="text-white">Keywords</Label>
+                <Input
+                  value={form.watch("keywords")}
+                  onChange={(e) => form.setValue("keywords", e.target.value)}
+                  placeholder="e.g. Fortnite, League of Legends, Call of Duty"
+                  className="w-[300px]"
+                />
+              </>
             }
           />
         )}
@@ -149,24 +156,30 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             form={form}
             title="Additional information"
             name="additionalInfo"
+            onChange={(value) => form.setValue("additionalInfo", value)}
             formField={
-              <Input
-                value={form.watch("additionalInfo")}
-                onChange={(e) => form.setValue("additionalInfo", e.target.value)}
-                placeholder="e.g. List interesting facts about Call of Duty"
-              />
+              <>
+                <Label className="text-white">Additional info</Label>
+                <Input
+                  value={form.watch("additionalInfo")}
+                  onChange={(e) => form.setValue("additionalInfo", e.target.value)}
+                  placeholder="e.g. List interesting facts about Call of Duty"
+                  className="w-[300px]"
+                />
+              </>
             }
           />
         )}
-
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="flex items-center justify-center gap-2"
-        >
-          {isLoading && <CustomLoader />}
-          {isLoading ? "Generating..." : "Generate"}
-        </Button>
+        <div>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="flex items-center justify-center gap-2 self-center mt-5"
+          >
+            {isLoading && <CustomLoader />}
+            {isLoading ? "Generating..." : "Generate ✨"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

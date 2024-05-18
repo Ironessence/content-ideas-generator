@@ -21,7 +21,7 @@ const handler = NextAuth({
             //What the user object looks like in the DB.
             email: user.email,
             name: user.name,
-            diamonds: 150,
+            tokens: 150,
             image: user.image,
           }),
         });
