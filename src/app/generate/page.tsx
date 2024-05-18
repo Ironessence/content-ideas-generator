@@ -8,11 +8,19 @@ import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import empty from "@/assets/icons/icon-empty.png";
 import { SkeletonCard } from "@/components/shared/SkeletonCard";
+import { subtractUserTokens } from "@/lib/clientApi";
+import { constants } from "@/constants";
+import { toast, useToast } from "@/components/ui/use-toast";
 
 const Generate = () => {
   const { user } = useUserContext();
   const [data, setData] = useState<DataType | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+
+  if (!user) {
+    return null;
+  }
 
   // const handleSubmit = async (form: UseFormReturn<any>) => {
   //   setIsLoading(true);
@@ -37,6 +45,18 @@ const Generate = () => {
 
   const handleSubmit = async (form: UseFormReturn<any>) => {
     setIsLoading(true);
+
+    await subtractUserTokens(user, constants.ideasPrice)
+      .then((res) => console.log("RES:", res))
+
+      .catch((err) => {
+        console.log("err:", err);
+        toast({
+          title: "Not enough tokens!",
+          description: "You don't have enough tokens to generate ideas. Please buy more tokens.",
+        });
+        return;
+      });
 
     await new Promise((resolve) => setTimeout(resolve, 3000))
       .then(() =>
@@ -91,7 +111,7 @@ const Generate = () => {
                 />
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center w-full">
                 <Image
                   src={empty}
                   alt="empty"

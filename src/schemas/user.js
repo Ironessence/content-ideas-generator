@@ -4,7 +4,7 @@ const userSchema = new Schema(
   {
     email: String,
     name: String,
-    diamonds: Number,
+    tokens: Number,
     image: String,
   },
   {
