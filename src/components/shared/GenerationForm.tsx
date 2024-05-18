@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect } from "react";
+import React from "react";
 import { z } from "zod";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +11,6 @@ import {
   toneType,
   videoLengthType,
 } from "../../utils/generationData";
-import ChoiceCard from "./ChoiceCard";
 import { Input } from "../ui/input";
 import CustomLoader from "./Loader/CustomLoader";
 import { Label } from "../ui/label";
@@ -36,8 +35,10 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      contentType: "Reel",
       toneType: "None",
       videoLength: "0-15 seconds",
+      optimizeFor: "Nothing",
       niche: "",
       keywords: "",
       additionalInfo: "",

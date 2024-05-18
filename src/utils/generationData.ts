@@ -49,7 +49,7 @@ export const videoLengthType = [
 
 export const optimizeForType = [
   {
-    title: "n/a",
+    title: "Nothing",
   },
   {
     title: "Likes",
