@@ -90,7 +90,7 @@ const Generate = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-70px)]">
+    <div className="min-h-[calc(100vh-90px)]">
       <h1 className="text-center text-[24px] font-bold mt-5">
         Generate <span className="bg-pink-500 p-1 px-2">Instagram</span> Ideas
       </h1>
