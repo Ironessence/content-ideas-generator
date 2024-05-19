@@ -50,22 +50,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     onSubmit(form);
   };
 
-  const handleSelectContentType = (contentType: string) => {
-    form.setValue("contentType", contentType);
-  };
-
-  const handleSelectToneType = (toneType: string) => {
-    form.setValue("toneType", toneType);
-  };
-
-  const handleSelectVideoLengthType = (videoLength: string) => {
-    form.setValue("videoLength", videoLength);
-  };
-
-  const handleSelectOptimizeFor = (optimizeFor: string) => {
-    form.setValue("optimizeFor", optimizeFor);
-  };
-
   return (
     <Form {...form}>
       <form
@@ -79,7 +63,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             title="Content Type"
             name="contentType"
             choices={instagramContentType.map((item) => item.title)}
-            onChange={handleSelectContentType}
           />
 
           {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
@@ -90,7 +73,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               title="Tone"
               name="toneType"
               choices={toneType.map((item) => item.title)}
-              onChange={handleSelectToneType}
             />
           )}
 
@@ -100,7 +82,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               title="Video Length"
               name="videoLength"
               choices={videoLengthType.map((item) => item.title)}
-              onChange={handleSelectVideoLengthType}
             />
           )}
 
@@ -110,7 +91,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               title="Optimize for"
               name="optimizeFor"
               choices={optimizeForType.map((item) => item.title)}
-              onChange={handleSelectOptimizeFor}
             />
           )}
         </div>
@@ -121,13 +101,12 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               form={form}
               title="Niche"
               name="niche"
-              onChange={(value) => form.setValue("niche", value)}
               formField={
                 <>
                   <Label className="text-white">Niche</Label>
                   <Input
                     value={form.watch("niche")}
-                    onChange={(e) => form.setValue("niche", e.target.value)}
+                    {...form.register("niche")}
                     placeholder="e.g. Video Games"
                     className="max-w-[350px] min-w-[300px]"
                   />
@@ -141,13 +120,12 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               form={form}
               title="Keywords"
               name="keywords"
-              onChange={(value) => form.setValue("keywords", value)}
               formField={
                 <>
                   <Label className="text-white">Keywords</Label>
                   <Input
                     value={form.watch("keywords")}
-                    onChange={(e) => form.setValue("keywords", e.target.value)}
+                    {...form.register("keywords")}
                     placeholder="e.g. Fortnite, League of Legends, Call of Duty"
                     className="max-w-[350px] min-w-[300px]"
                   />
@@ -161,13 +139,12 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
               form={form}
               title="Additional information"
               name="additionalInfo"
-              onChange={(value) => form.setValue("additionalInfo", value)}
               formField={
                 <>
                   <Label className="text-white">Additional info</Label>
                   <Textarea
                     value={form.watch("additionalInfo")}
-                    onChange={(e) => form.setValue("additionalInfo", e.target.value)}
+                    {...form.register("additionalInfo")}
                     placeholder="e.g. List interesting facts about Call of Duty"
                     className="resize-none max-w-[350px] min-w-[300px]"
                   />

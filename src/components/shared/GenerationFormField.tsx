@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel } from "../ui/form";
 
 interface GenerationFormFieldProps {
@@ -14,7 +14,6 @@ interface GenerationFormFieldProps {
   name: string;
   choices?: string[];
   formField?: JSX.Element;
-  onChange: (value: string) => void;
 }
 
 const GenerationFormField = ({
@@ -23,7 +22,6 @@ const GenerationFormField = ({
   name,
   choices,
   formField,
-  onChange,
 }: GenerationFormFieldProps) => {
   return (
     <FormField
@@ -34,31 +32,34 @@ const GenerationFormField = ({
           {choices && choices.length > 0 && (
             <>
               <FormLabel className="text-white font-semibold">{title}</FormLabel>
-              <Select
-                onValueChange={(value) => onChange(value)}
-                value={form.watch(name)}
-              >
-                <SelectTrigger className="w-[150px] bg-slate-600 text-white focus:text-white border-slate-600">
-                  <SelectValue placeholder={form.watch(name)} />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-600 text-white focus:text-white selection:text-white border-slate-800">
-                  {choices &&
-                    choices.map((choice, index) => (
-                      <div key={choice}>
-                        <SelectItem
-                          value={choice}
-                          key={choice}
-                          className="bg-slate-600 focus:bg-slate-600 text-white focus:text-white selection:text-white py-3 "
-                        >
-                          {choice}
-                        </SelectItem>
-                        {index !== choices.length - 1 && (
-                          <div className="w-[75%] h-[1px] bg-slate-700 ml-auto mr-auto" />
-                        )}
-                      </div>
-                    ))}
-                </SelectContent>
-              </Select>
+              <Controller
+                control={form.control}
+                name={name}
+                render={({ field }) => (
+                  <Select onValueChange={(value) => field.onChange(value)}>
+                    <SelectTrigger className="w-[150px] bg-slate-600 text-white focus:text-white border-slate-600">
+                      <SelectValue placeholder={form.watch(name)} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-600 text-white focus:text-white selection:text-white border-slate-800">
+                      {choices &&
+                        choices.map((choice, index) => (
+                          <div key={choice}>
+                            <SelectItem
+                              value={choice}
+                              key={choice}
+                              className="bg-slate-600 focus:bg-slate-600 text-white focus:text-white selection:text-white py-3 "
+                            >
+                              {choice}
+                            </SelectItem>
+                            {index !== choices.length - 1 && (
+                              <div className="w-[75%] h-[1px] bg-slate-700 ml-auto mr-auto" />
+                            )}
+                          </div>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </>
           )}
           {formField ?? null}
