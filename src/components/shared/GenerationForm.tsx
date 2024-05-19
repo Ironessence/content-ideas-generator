@@ -1,20 +1,19 @@
-import React from "react";
-import { z } from "zod";
-import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../ui/form";
-import { Button } from "../ui/button";
-import GenerationFormField from "./GenerationFormField";
+import { UseFormReturn, useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   instagramContentType,
   optimizeForType,
   toneType,
   videoLengthType,
 } from "../../utils/generationData";
+import { Button } from "../ui/button";
+import { Form } from "../ui/form";
 import { Input } from "../ui/input";
-import CustomLoader from "./Loader/CustomLoader";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import GenerationFormField from "./GenerationFormField";
+import CustomLoader from "./Loader/CustomLoader";
 
 interface GenerationFormProps {
   onSubmit: (form: UseFormReturn<any>) => void;
@@ -28,13 +27,14 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     toneType: z.string(),
     videoLength: z.string(),
     optimizeFor: z.string(),
-    niche: z.string(),
+    niche: z.string().min(5, { message: "Must be 5 or more characters long" }), //TODO
     keywords: z.string(),
     additionalInfo: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       contentType: "Reel",
       toneType: "None",
@@ -70,9 +70,9 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="text-black flex flex-col gap-2 w-full md:items-center  "
+        className="text-black flex flex-col gap-2 w-full items-center  "
       >
-        <div className="flex flex-wrap gap-5 items-center ">
+        <div className="flex flex-wrap gap-5 items-center justify-center ">
           {/* CONTENT TYPE */}
           <GenerationFormField
             form={form}
@@ -179,8 +179,8 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
         <div>
           <Button
             type="submit"
-            disabled={isLoading}
-            className="flex items-center justify-center gap-2 self-center mt-5 bg-pink-500 hover:bg-pink-600 "
+            disabled={isLoading || !form.formState.isValid}
+            className="flex items-center justify-center gap-2  mt-5 bg-pink-500 hover:bg-pink-600"
           >
             {isLoading && <CustomLoader />}
             {isLoading ? "Generating..." : "Generate ✨"}

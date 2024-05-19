@@ -1,5 +1,5 @@
-import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import OpenAI from "openai";
 
 export const runtime = "edge";
 
@@ -66,6 +66,13 @@ export async function POST(req: Request) {
       },
       {
         id: 2,
+        idea: "The actual idea, explained in a brief summary",
+        viralityScore:
+          "Your own estimation of how likely it is for a video that displays the idea to go viral on Instagram",
+        shortDescription: "A brief description of the idea, in 50 to 150 words",
+      },
+      {
+        id: 3,
         idea: "The actual idea, explained in a brief summary",
         viralityScore:
           "Your own estimation of how likely it is for a video that displays the idea to go viral on Instagram",

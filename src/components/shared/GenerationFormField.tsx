@@ -1,7 +1,3 @@
-import React from "react";
-import { FormField, FormItem, FormLabel } from "../ui/form";
-import { UseFormReturn } from "react-hook-form";
-import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -9,6 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UseFormReturn } from "react-hook-form";
+import { FormField, FormItem, FormLabel } from "../ui/form";
 
 interface GenerationFormFieldProps {
   form: UseFormReturn<any>;

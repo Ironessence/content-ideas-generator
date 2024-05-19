@@ -1,30 +1,22 @@
 "use client";
+import empty from "@/assets/icons/icon-empty.png";
 import GeneratedIdea from "@/components/shared/GeneratedIdea";
 import GenerationForm from "@/components/shared/GenerationForm";
+import { SkeletonCard } from "@/components/shared/SkeletonCard";
+import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
+import { useDataContext } from "@/context/DataContext";
+import { subtractUserTokens } from "@/lib/clientApi";
 import { DataType } from "@/types/idea.types";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
-import empty from "@/assets/icons/icon-empty.png";
-import { SkeletonCard } from "@/components/shared/SkeletonCard";
-import { subtractUserTokens } from "@/lib/clientApi";
-import { constants } from "@/constants";
-import { toast, useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import PurchaseTokensDrawer from "@/components/shared/PurchaseTokensDrawer";
-import { Button } from "@/components/ui/button";
 
 const Generate = () => {
   const { user, refreshUser } = useUserContext();
   const [data, setData] = useState<DataType | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isPurchaseTokensModalOpen, setIsPurchaseTokensModalOpen] = useState(false);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    console.log("ISPURCHASEOPEN:", isPurchaseTokensModalOpen);
-  }, [isPurchaseTokensModalOpen]);
+  const { handleOpenModal } = useDataContext();
 
   if (!user) {
     return null;
@@ -59,7 +51,7 @@ const Generate = () => {
       .then((res) => console.log("RES:", res))
       .catch((err) => {
         console.log("err:", err);
-        setIsPurchaseTokensModalOpen(true);
+        handleOpenModal("InsufficientTokens");
         sufficientTokens = false;
         setIsLoading(false);
         return;
@@ -95,9 +87,9 @@ const Generate = () => {
         Generate <span className="bg-pink-500 p-1 px-2">Instagram</span> Ideas
       </h1>
       {/* CONTAINER */}
-      <div className="flex flex-col items-start justify-start w-[100%] p-5 rounded-xl ">
+      <div className="flex flex-col items-center justify-center w-[100%] p-5 rounded-xl ">
         {/* LEFT SIDE */}
-        <div className="flex-1 flex-col flex w-full md:items-center md:justify-center ">
+        <div className="flex-1 flex-col flex w-full items-center justify-center ">
           <h2 className=" font-semibold mb-5">Configuration:</h2>
           <GenerationForm
             onSubmit={handleSubmit}
@@ -105,8 +97,8 @@ const Generate = () => {
             setIsLoading={setIsLoading}
           />
         </div>
-        <div className="flex-1 mt-10 w-full md:items-center md:justify-center ">
-          <h2 className="md:text-center font-semibold">Results:</h2>
+        <div className="flex-1 mt-10 w-full items-center justify-center ">
+          <h2 className="text-center font-semibold">Results:</h2>
           <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4 md:flex-row">
             {isLoading && (
               <div className="flex flex-col items-center justify-center gap-7 w-full md:flex-row md:w-[75%] md:mb-10 ">
@@ -136,10 +128,6 @@ const Generate = () => {
           </div>
         </div>
       </div>
-      <PurchaseTokensDrawer
-        isOpen={isPurchaseTokensModalOpen}
-        setIsOpen={setIsPurchaseTokensModalOpen}
-      />
     </div>
   );
 };

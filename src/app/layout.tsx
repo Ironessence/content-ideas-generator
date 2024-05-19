@@ -1,9 +1,10 @@
+import Navbar from "@/components/shared/Navbar";
+import PurchaseTokensDrawer from "@/components/shared/PurchaseTokensDrawer";
+import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/lib/providers/Providers";
 import type { Metadata } from "next";
 import { Inter, Kanit } from "next/font/google";
 import "./globals.css";
-import Providers from "@/lib/providers/Providers";
-import Navbar from "@/components/shared/Navbar";
-import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 export const kanit = Kanit({ weight: "400", subsets: ["latin"], variable: "--font-kanit" });
@@ -26,6 +27,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <Toaster />
+            <PurchaseTokensDrawer />
           </div>
         </Providers>
       </body>

@@ -1,31 +1,26 @@
+"use client";
+import close from "@/assets/icons/icon-close.png";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "../ui/button";
-import Image from "next/image";
-import close from "@/assets/icons/icon-close.png";
-import { pricingOptions } from "@/constants";
-import PricingCard from "./PricingCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { pricingOptions } from "@/constants";
+import { useDataContext } from "@/context/DataContext";
+import Image from "next/image";
+import PricingCard from "./PricingCard";
 
-interface PurchaseTokensDrawerProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-}
+const PurchaseTokensDrawer = () => {
+  const { isPurchaseModalOpen, setIsPurchaseModalOpen, title } = useDataContext();
 
-const PurchaseTokensDrawer = ({ isOpen, setIsOpen }: PurchaseTokensDrawerProps) => {
-  console.log("RENDERED");
   return (
     <Drawer
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
+      open={isPurchaseModalOpen}
+      onClose={() => setIsPurchaseModalOpen(false)}
     >
       <DrawerContent className="max-h-[80vh]">
         <div className="flex items-end justify-end mx-6">
@@ -35,11 +30,11 @@ const PurchaseTokensDrawer = ({ isOpen, setIsOpen }: PurchaseTokensDrawerProps) 
             width={20}
             height={20}
             className="cursor-pointer"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsPurchaseModalOpen(false)}
           />
         </div>
         <DrawerHeader>
-          <DrawerTitle className="text-slate-600  text-center"> Not enough tokens 😔</DrawerTitle>
+          <DrawerTitle className="text-slate-600  text-center">{title}</DrawerTitle>
           <DrawerDescription className="text-center">
             Please purchase more tokens to continue generating ideas & content.
           </DrawerDescription>
