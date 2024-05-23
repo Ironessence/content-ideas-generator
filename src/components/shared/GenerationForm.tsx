@@ -27,14 +27,14 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     toneType: z.string(),
     videoLength: z.string(),
     optimizeFor: z.string(),
-    niche: z.string().min(5, { message: "Must be 5 or more characters long" }), //TODO
+    niche: z.string().min(3, { message: "Must have at least 3 characters" }),
     keywords: z.string(),
     additionalInfo: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: {
       contentType: "Reel",
       toneType: "None",
@@ -110,6 +110,11 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
                     placeholder="e.g. Video Games"
                     className="max-w-[350px] min-w-[300px]"
                   />
+                  {form.formState.errors.niche && (
+                    <p className="text-red-500 text-[14px]">
+                      {form.formState.errors.niche.message}
+                    </p>
+                  )}
                 </>
               }
             />
