@@ -6,4 +6,5 @@ export type PricingOptionsType = {
   image: string;
   price: number;
   aproxIdeas: number;
+  link?: string;
 };
