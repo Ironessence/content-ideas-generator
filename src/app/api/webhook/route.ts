@@ -1,3 +1,5 @@
+import { UserSchema } from "@/schemas/user";
+import db from "@/utils/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -16,7 +18,6 @@ export const config = {
 
 export const POST = async (req: any) => {
   try {
-    console.log("req.headers:", req.headers);
     if (req.method !== "POST") {
       return new NextResponse("Only POST Requests allowed", { status: 200 });
     }
@@ -24,8 +25,6 @@ export const POST = async (req: any) => {
     const sig: any = headers().get("Stripe-Signature") as string;
     // const rawBody = await getRawBody(req);
     const rawBody = await req.text();
-    console.log("*****************Raw Body:", rawBody);
-    console.log("*****************Signature:", sig);
 
     let event;
 
@@ -36,22 +35,40 @@ export const POST = async (req: any) => {
     }
 
     if (event.type === "checkout.session.completed") {
-      const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
-        (event.data.object as any).id,
-        {
-          expand: ["line_items"],
-        },
-      );
-      const lineItems = sessionWithLineItems.line_items;
+      const {
+        id,
+        amount_total,
+        created,
+        metadata: { userEmail },
+      } = event.data.object as any;
 
-      if (!lineItems) return new NextResponse("Internal server error!", { status: 500 });
+      console.log("Id:", id);
+      console.log("Amount:", amount_total);
+      console.log("Created:", created);
+      console.log("User Email:", userEmail);
+
+      await db();
 
       try {
-        console.log("fulfill the customer logic");
-        console.log("lineItems Data:", lineItems.data);
-        console.log("lineItems Object:", lineItems.object);
+        await UserSchema.findOneAndUpdate(
+          { email: userEmail },
+          {
+            $push: {
+              transactions: {
+                price: amount_total === 1000 ? 10 : amount_total === 2000 ? 20 : 30, // This does not work
+                createdAt: created,
+                quantity: amount_total === 1000 ? 1000 : amount_total === 2000 ? 2500 : 4000,
+                id: id,
+              },
+            },
+            $inc: { tokens: amount_total },
+          },
+          { new: true }, // This option returns the modified document
+        );
+
+        return new NextResponse("Successfully updated user", { status: 200 });
       } catch (err) {
-        console.log("Unable to handle the event:", err);
+        return new NextResponse("Error when updating user", { status: 500 });
       }
     }
 

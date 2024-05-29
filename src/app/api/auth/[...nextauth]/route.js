@@ -13,7 +13,6 @@ const handler = NextAuth({
   callbacks: {
     // The user is written in the database directly after login here >
     async signIn({ user }) {
-      console.log("USER asdasd:", user);
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/users`, {
           method: "POST",

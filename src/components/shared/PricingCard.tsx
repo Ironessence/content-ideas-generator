@@ -1,16 +1,36 @@
 "use client";
+import { useUserContext } from "@/context/AuthContext";
+import { useCheckoutOrder } from "@/lib/hooks/useCheckoutOrder";
 import { PricingOptionsType } from "@/types/pricingOptions.types";
+import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 
 interface PricingCardProps {
   option: PricingOptionsType;
 }
 
+loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+
 const PricingCard = ({ option }: PricingCardProps) => {
   const { title, bonus, image, price, mostPopular, aproxIdeas, link } = option;
-  const route = useRouter();
+
+  const { user } = useUserContext();
+  const { handleCheckout } = useCheckoutOrder(user!, price);
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      console.log("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      console.log("Order canceled -- continue to shop around and checkout when you’re ready.");
+    }
+  }, []);
+
   return (
     <div className="relative py-5">
       <div
@@ -37,12 +57,14 @@ const PricingCard = ({ option }: PricingCardProps) => {
         />
         <h1 className="text-blue-900 text-center font-extrabold text-[24px]">Price: ${price}</h1>
         <h3 className="text-center text-slate-400 text-[14px]">(incl. taxes)</h3>
-        <Button
-          className="w-full mt-2 bg-pink-500 hover:bg-pink-600"
-          onClick={() => route.push("https://buy.stripe.com/test_aEUeYR8Kb6GdaJO000")}
-        >
-          Buy now
-        </Button>
+        {user && (
+          <Button
+            className="w-full mt-2 bg-pink-500 hover:bg-pink-600"
+            onClick={() => handleCheckout()}
+          >
+            Buy now
+          </Button>
+        )}
       </div>
     </div>
   );

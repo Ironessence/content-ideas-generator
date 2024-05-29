@@ -1,7 +1,7 @@
 "use server";
-import db from "../../../utils/db";
-import { UserSchema } from "../../../schemas/user";
 import { NextResponse } from "next/server";
+import { UserSchema } from "../../../schemas/user";
+import db from "../../../utils/db";
 
 export const PUT = async (req: Request) => {
   const body = await req.json();
@@ -9,15 +9,10 @@ export const PUT = async (req: Request) => {
 
   try {
     await db();
-    const schema = await UserSchema.findOneAndUpdate(
-      { email: email },
-      { $inc: { tokens: -tokens } },
-    );
-    console.log("Successfully used tokens");
-    console.log("SCHEMA:", schema);
+    await UserSchema.findOneAndUpdate({ email: email }, { $inc: { tokens: -tokens } });
+
     return new NextResponse("Successfully used tokens", { status: 200 });
   } catch (err) {
-    console.log("err entered");
     return new NextResponse("Error when using tokens", { status: 500 });
   }
 };
