@@ -17,9 +17,9 @@ export const handleCheckout = async (user: IUser, price: number) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Tokens",
+              name: `${totalPrice === 1000 ? "1000" : totalPrice === 2000 ? "2500" : "4000"} Tokens`,
             },
-            unit_amount: totalPrice === 1000 ? 1000 : totalPrice === 2000 ? 2500 : 4000,
+            unit_amount: totalPrice,
           },
           quantity: 1,
         },
