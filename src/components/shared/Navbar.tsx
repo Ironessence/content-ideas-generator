@@ -11,7 +11,9 @@ const Navbar = () => {
         className="h-auto w-auto cursor-pointer"
         onClick={() => router.push("/")}
       >
-        <h2 className={`font-sans text-2xl font-extrabold tracking-widest text-white`}>IdeaFizz</h2>
+        <h2 className={`font-sans text-2xl font-extrabold tracking-widest text-white`}>
+          HashtagFast
+        </h2>
       </div>
       {pathname !== "/" && (
         <div className="h-auto w-auto">
