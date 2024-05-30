@@ -1,6 +1,6 @@
 "use client";
 import { useUserContext } from "@/context/AuthContext";
-import { useCheckoutOrder } from "@/lib/hooks/useCheckoutOrder";
+import { handleCheckout } from "@/lib/clientApi/handleCheckout";
 import { PricingOptionsType } from "@/types/pricingOptions.types";
 import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
@@ -17,7 +17,6 @@ const PricingCard = ({ option }: PricingCardProps) => {
   const { title, bonus, image, price, mostPopular, aproxIdeas, link } = option;
 
   const { user } = useUserContext();
-  const { handleCheckout } = useCheckoutOrder(user!, price);
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
@@ -60,7 +59,7 @@ const PricingCard = ({ option }: PricingCardProps) => {
         {user && (
           <Button
             className="w-full mt-2 bg-pink-500 hover:bg-pink-600"
-            onClick={() => handleCheckout()}
+            onClick={() => handleCheckout(user, price).then((url) => window.open(url!, "_self"))}
           >
             Buy now
           </Button>

@@ -6,7 +6,7 @@ const transactionSchema = new Schema(
       type: Date,
       required: true,
     },
-    amount: {
+    price: {
       type: Number,
       required: true,
     },
