@@ -22,6 +22,7 @@ const handler = NextAuth({
             name: user.name,
             tokens: 150,
             image: user.image,
+            transactions: [],
           }),
         });
         if (!response) {
