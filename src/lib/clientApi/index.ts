@@ -1,3 +1,4 @@
+import { IdeaType } from "@/types/idea.types";
 import { IUser } from "@/types/user.types";
 import { NextResponse } from "next/server";
 
@@ -56,5 +57,23 @@ export const getUserTransactions = async (email: string) => {
     return response.json();
   } catch (err) {
     console.log("getUserTransactions - catch error", err);
+  }
+};
+
+export const handleSaveIdea = async (idea: IdeaType, email: string) => {
+  try {
+    const response = await fetch(`/api/ideas`, {
+      method: "POST",
+      body: JSON.stringify({ idea, email }),
+    });
+
+    if (!response) {
+      console.log("saveIdea - error while saving idea");
+      return;
+    }
+
+    return response.json();
+  } catch (err) {
+    console.log("saveIdea - catch error", err);
   }
 };

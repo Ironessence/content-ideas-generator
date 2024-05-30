@@ -1,10 +1,12 @@
-import { IdeaType, ScriptDataType, ScriptType } from "@/types/idea.types";
-import React, { useEffect, useState } from "react";
-import heartEmpty from "@/assets/icons/heart-empty.png";
-import heartFilled from "@/assets/icons/heart-filled.png";
-import Image from "next/image";
-import { Button } from "../ui/button";
 import coin from "@/assets/icons/icon-coin.png";
+import saveFilled from "@/assets/icons/icon-save-filled.png";
+import saveEmpty from "@/assets/icons/icon-save-outline.png";
+import { useUserContext } from "@/context/AuthContext";
+import { handleSaveIdea } from "@/lib/clientApi";
+import { IdeaType, ScriptDataType } from "@/types/idea.types";
+import Image from "next/image";
+import { useState } from "react";
+import { Button } from "../ui/button";
 import CustomLoader from "./Loader/CustomLoader";
 
 interface GeneratedIdeaProps {
@@ -12,10 +14,12 @@ interface GeneratedIdeaProps {
 }
 
 const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
+  const { user } = useUserContext();
 
   const handleGenerateScript = async () => {
     setIsLoading(true);
@@ -35,17 +39,31 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
       .finally(() => setIsLoading(false));
   };
 
+  const handleClickSaveIdea = () => {
+    setIsSavingLoading(true);
+    handleSaveIdea(idea, user?.email!)
+      .then(() => setIsSaved((prev) => !prev))
+      .catch((err) => console.log("error when saving idea:", err))
+      .finally(() => setIsSavingLoading(false));
+  };
+
   return (
     <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] ">
-      <Image
-        src={isLiked ? heartFilled : heartEmpty}
-        alt="heart icon"
-        width={25}
-        height={25}
-        priority
-        className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
-        onClick={() => setIsLiked((prev) => !prev)}
-      />
+      {isSavingLoading ? (
+        <div className="flex justify-end">
+          <CustomLoader />
+        </div>
+      ) : (
+        <Image
+          src={isSaved ? saveFilled : saveEmpty}
+          alt="save icon"
+          width={25}
+          height={25}
+          priority
+          className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
+          onClick={handleClickSaveIdea}
+        />
+      )}
       <h2 className="font-semibold">Idea:</h2>
       <h2 className="mb-3">{idea.idea}</h2>
       <h2 className="font-semibold">Short description:</h2>

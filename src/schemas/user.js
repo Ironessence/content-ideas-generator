@@ -1,5 +1,24 @@
 import mongoose, { Schema } from "mongoose";
 
+const ideaSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+  },
+  idea: {
+    type: String,
+    required: true,
+  },
+  viralityScore: {
+    type: Number,
+    required: true,
+  },
+  shortDescription: {
+    type: String,
+    required: true,
+  },
+});
+
 const transactionSchema = new Schema(
   {
     createdAt: {
@@ -32,6 +51,10 @@ const userSchema = new Schema(
     image: String,
     transactions: {
       type: [transactionSchema],
+      default: [],
+    },
+    savedIdeas: {
+      type: [ideaSchema],
       default: [],
     },
   },

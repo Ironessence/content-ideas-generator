@@ -13,4 +13,6 @@ export type IUser = {
   email: string;
   tokens: number;
   image: string;
+  transactions?: [];
+  savedIdeas?: [];
 };
