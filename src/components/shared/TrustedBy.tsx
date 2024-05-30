@@ -1,11 +1,9 @@
-import Image from "next/image";
-import React from "react";
+import star from "@/assets/icons/star.png";
 import img1 from "@/assets/usedBy/examplePeople1.jpg";
-import img2 from "@/assets/usedBy/examplePeople2.jpg";
 import img3 from "@/assets/usedBy/examplePeople3.jpg";
 import img4 from "@/assets/usedBy/examplePeople4.jpg";
 import img5 from "@/assets/usedBy/examplePeople5.jpg";
-import star from "@/assets/icons/star.png";
+import Image from "next/image";
 
 const TrustedBy = () => {
   return (

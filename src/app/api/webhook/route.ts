@@ -10,11 +10,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 const endpointSecret = process.env.WEBHOOK_SECRET as string;
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 export const POST = async (req: any) => {
   try {
@@ -23,7 +23,7 @@ export const POST = async (req: any) => {
     }
 
     const sig: any = headers().get("Stripe-Signature") as string;
-    // const rawBody = await getRawBody(req);
+
     const rawBody = await req.text();
 
     let event;
