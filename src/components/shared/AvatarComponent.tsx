@@ -1,9 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUserContext } from "@/context/AuthContext";
-import Image from "next/image";
 import arrow from "@/assets/icons/arrow-down.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserContext } from "@/context/AuthContext";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const AvatarComponent = () => {
   const { user } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   if (!user) return null;
   return (
@@ -47,7 +49,12 @@ const AvatarComponent = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuItem className="cursor-pointer">Saved Ideas</DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">Transaction History</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push("/transactions")}
+        >
+          Transaction History
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="text-red-800 font-semibold cursor-pointer "
           onClick={() => signOut({ redirect: true, callbackUrl: "/" })}

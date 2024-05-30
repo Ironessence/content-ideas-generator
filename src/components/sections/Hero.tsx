@@ -1,12 +1,11 @@
-import Image from "next/image";
-import React from "react";
 import heroImg from "@/assets/heroImage.png";
-import { Button } from "../ui/button";
-import arrow from "@/assets/icons/right-arrow.png";
 import checkmark from "@/assets/icons/checkmark.png";
-import TrustedBy from "../shared/TrustedBy";
+import arrow from "@/assets/icons/right-arrow.png";
 import { useUserContext } from "@/context/AuthContext";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import TrustedBy from "../shared/TrustedBy";
+import { Button } from "../ui/button";
 
 interface HeroProps {
   setIsLoginOpen: (value: boolean) => void;
@@ -16,7 +15,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div className=" flex my-[5%] px-[150px]">
+    <div className="flex my-[5%] px-[150px]">
       <div className="flex-1 flex flex-col items-center gap-5 my-[100px]  ">
         <h1 className="text-[56px] font-extrabold  text-gray-200 drop-shadow-lg">
           Create <span className="text-pink-500">Quality</span> Social Media Content in{" "}

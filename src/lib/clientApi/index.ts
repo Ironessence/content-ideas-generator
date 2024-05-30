@@ -41,3 +41,20 @@ export const subtractUserTokens = async (user: IUser, tokens: number) => {
     console.log("useTokens - catch error", err);
   }
 };
+
+export const getUserTransactions = async (email: string) => {
+  try {
+    const response = await fetch(`/api/transactions/${email}`, {
+      method: "GET",
+    });
+
+    if (!response) {
+      console.log("getUserTransactions - error while getting user transactions");
+      return;
+    }
+
+    return response.json();
+  } catch (err) {
+    console.log("getUserTransactions - catch error", err);
+  }
+};

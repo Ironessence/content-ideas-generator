@@ -9,22 +9,10 @@ import AvatarComponent from "./AvatarComponent";
 
 const NavbarUserInfo = () => {
   const { user } = useUserContext();
-  const { setIsPurchaseModalOpen, handleOpenModal } = useDataContext();
+  const { handleOpenModal } = useDataContext();
 
   return (
     <div className="flex items-center justify-center gap-2">
-      {/* <div
-        className="relative mr-5 group"
-        onClick={() => setIsPurchaseModalOpen(true)}
-      >
-        <Image
-          src={buyCoins}
-          alt="purchase-coins"
-          width={30}
-          height={30}
-        />
-       
-      </div> */}
       <Button
         variant={"outline"}
         className="bg-transparent border-slate-400 flex items-center justify-center gap-1 hover:bg-pink-500 hover:text-white hover:border-white"
