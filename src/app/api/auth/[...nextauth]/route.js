@@ -17,7 +17,6 @@ const handler = NextAuth({
         const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/users`, {
           method: "POST",
           body: JSON.stringify({
-            //What the user object looks like in the DB.
             email: user.email,
             name: user.name,
             tokens: 150,
