@@ -19,9 +19,9 @@ export const handleCheckout = async (user: IUser, price: number) => {
             product_data: {
               name: "Tokens",
             },
-            unit_amount: totalPrice,
+            unit_amount: totalPrice === 1000 ? 1000 : totalPrice === 2000 ? 2500 : 4000,
           },
-          quantity: totalPrice === 1000 ? 1000 : totalPrice === 2000 ? 2500 : 4000,
+          quantity: 1,
         },
       ],
       metadata: {
