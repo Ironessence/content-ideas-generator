@@ -18,14 +18,14 @@ export const POST = async (req: Request) => {
     }
 
     try {
+      console.log("IDEA:", idea);
       await UserSchema.findOneAndUpdate(
         { email: email },
         { $push: { savedIdeas: idea } },
         { new: true },
       );
-      // TODO: Problem here
     } catch (err) {
-      return new NextResponse("Error when saving idea12", { status: 500 });
+      return new NextResponse(JSON.stringify(err), { status: 500 });
     }
 
     return new NextResponse("Successfully saved idea!", {

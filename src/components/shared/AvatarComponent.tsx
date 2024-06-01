@@ -48,7 +48,12 @@ const AvatarComponent = () => {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-300" />
-        <DropdownMenuItem className="cursor-pointer">Saved Ideas</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => router.push("/saved")}
+        >
+          Saved Ideas
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer"
           onClick={() => router.push("/transactions")}

@@ -5,6 +5,7 @@ import { useUserContext } from "@/context/AuthContext";
 import { handleSaveIdea } from "@/lib/clientApi";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import CustomLoader from "./Loader/CustomLoader";
@@ -20,6 +21,7 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
   const { user } = useUserContext();
+  const pathname = usePathname();
 
   const handleGenerateScript = async () => {
     setIsLoading(true);
@@ -49,21 +51,23 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
 
   return (
     <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] ">
-      {isSavingLoading ? (
-        <div className="flex justify-end">
-          <CustomLoader />
-        </div>
-      ) : (
-        <Image
-          src={isSaved ? saveFilled : saveEmpty}
-          alt="save icon"
-          width={25}
-          height={25}
-          priority
-          className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
-          onClick={handleClickSaveIdea}
-        />
-      )}
+      {pathname !== "/saved" ? (
+        isSavingLoading ? (
+          <div className="flex justify-end">
+            <CustomLoader />
+          </div>
+        ) : (
+          <Image
+            src={isSaved ? saveFilled : saveEmpty}
+            alt="save icon"
+            width={25}
+            height={25}
+            priority
+            className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
+            onClick={handleClickSaveIdea}
+          />
+        )
+      ) : null}
       <h2 className="font-semibold">Idea:</h2>
       <h2 className="mb-3">{idea.idea}</h2>
       <h2 className="font-semibold">Short description:</h2>

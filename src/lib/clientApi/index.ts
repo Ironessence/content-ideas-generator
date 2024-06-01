@@ -60,9 +60,26 @@ export const getUserTransactions = async (email: string) => {
   }
 };
 
+export const getUserSavedIdeas = async (email: string) => {
+  try {
+    const response = await fetch(`/api/get-saved-ideas/${email}`, {
+      method: "GET",
+    });
+
+    if (!response) {
+      console.log("getUserSavedIdeas - error while getting user saved ideas");
+      return;
+    }
+
+    return response.json();
+  } catch (err) {
+    console.log("getUserSavedIdeas - catch error", err);
+  }
+};
+
 export const handleSaveIdea = async (idea: IdeaType, email: string) => {
   try {
-    const response = await fetch(`/api/ideas`, {
+    const response = await fetch(`/api/save-idea`, {
       method: "POST",
       body: JSON.stringify({ idea, email }),
     });
