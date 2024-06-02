@@ -110,7 +110,7 @@ const Generate = () => {
             {data && data.ideas.length > 0 ? (
               data.ideas.map((idea) => (
                 <GeneratedIdea
-                  key={idea.id}
+                  key={idea._id}
                   idea={idea}
                 />
               ))
