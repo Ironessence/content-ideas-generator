@@ -10,7 +10,7 @@ import { useDataContext } from "@/context/DataContext";
 import { subtractUserTokens } from "@/lib/clientApi";
 import { DataType } from "@/types/idea.types";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 const Generate = () => {
@@ -19,6 +19,7 @@ const Generate = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { handleOpenModal } = useDataContext();
   const { toast } = useToast();
+  const resultsDivRef = useRef<HTMLDivElement>(null);
 
   if (!user) {
     return null;
@@ -47,6 +48,7 @@ const Generate = () => {
 
   const handleSubmit = async (form: UseFormReturn<any>) => {
     setIsLoading(true);
+    setData(undefined);
     let sufficientTokens = true;
 
     await subtractUserTokens(user, constants.ideasPrice)
@@ -67,6 +69,9 @@ const Generate = () => {
           }),
         )
         .then((res) => {
+          if (resultsDivRef.current) {
+            resultsDivRef.current.scrollIntoView({ behavior: "smooth" });
+          }
           return res.clone().json();
         })
         .then((data) => {
@@ -94,39 +99,43 @@ const Generate = () => {
       <div className="flex flex-col items-center justify-center w-[100%] p-5 rounded-xl ">
         {/* LEFT SIDE */}
         <div className="flex-1 flex-col flex w-full items-center justify-center ">
-          <h2 className=" font-semibold mb-5">Configuration:</h2>
+          <h2 className="font-semibold mb-5">Configuration:</h2>
           <GenerationForm
             onSubmit={handleSubmit}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
           />
         </div>
-        <div className="flex-1 mt-10 w-full items-center justify-center ">
+        <div
+          ref={resultsDivRef}
+          className="flex-1 mt-10 w-full items-center justify-center  "
+        >
           <h2 className="text-center font-semibold">Results:</h2>
           <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4">
             {isLoading && (
-              <div className="flex flex-col items-center justify-center gap-7 w-full md:flex-row md:w-[75%] md:mb-10 ">
+              <div className="flex flex-col w-full sm:max-w-[900px] md:mb-10  items-center  justify-center">
                 <SkeletonCard />
               </div>
             )}
-            {data && data.ideas.length > 0 ? (
-              data.ideas.map((idea) => (
-                <GeneratedIdea
-                  key={idea._id}
-                  idea={idea}
-                />
-              ))
-            ) : (
-              <div className="flex flex-col items-center justify-center w-full">
-                <Image
-                  src={empty}
-                  alt="empty"
-                  width={40}
-                  height={40}
-                />
-                <h2 className="text-center text-gray-300">This list is empty.</h2>
-              </div>
-            )}
+            {data && data.ideas.length > 0
+              ? data.ideas.map((idea) => (
+                  <GeneratedIdea
+                    key={idea._id}
+                    idea={idea}
+                  />
+                ))
+              : !isLoading &&
+                !data && (
+                  <div className="flex flex-col items-center justify-center w-full">
+                    <Image
+                      src={empty}
+                      alt="empty"
+                      width={40}
+                      height={40}
+                    />
+                    <h2 className="text-center text-gray-300">This list is empty.</h2>
+                  </div>
+                )}
           </div>
         </div>
       </div>

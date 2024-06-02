@@ -56,16 +56,19 @@ export async function POST(req: Request) {
   const responseData = {
     ideas: [
       {
-        idea: "1The actual idea, explained in a brief summary",
-        shortDescription: "1A brief description of the idea, in 50 to 150 words",
+        idea: "1The actual idea, explained in a brief summary asd asd asd asd as",
+        shortDescription:
+          "1A brief description of the idea, in 50 to 150 words asdas fasf asfa sfpia sfas fasfas fasf asf ",
       },
       {
-        idea: "2The actual idea, explained in a brief summary",
-        shortDescription: "2A brief description of the idea, in 50 to 150 words",
+        idea: "2The actual idea, explained in a brief summary asfa sfasf asf asfa sfa",
+        shortDescription:
+          "2A brief description of the idea, in 50 to 150 words asfa sfasf asf asf asfas fasf asfas fasf asfa sfa",
       },
       {
-        idea: "3The actual idea, explained in a brief summary",
-        shortDescription: "3A brief description of the idea, in 50 to 150 words",
+        idea: "3The actual idea, explained in a brief summary asf asfas fasf asf asf ",
+        shortDescription:
+          "3A brief description of the idea, in 50 to 150 words asfas fasf asfa sfas fasf asfas  fas",
       },
     ],
   };

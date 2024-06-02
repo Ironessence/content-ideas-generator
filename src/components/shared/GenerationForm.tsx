@@ -1,4 +1,7 @@
+import token from "@/assets/icons/icon-coin.png";
+import { constants } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -162,10 +165,24 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
           <Button
             type="submit"
             disabled={isLoading || !form.formState.isValid}
-            className="flex items-center justify-center gap-2  mt-5 bg-pink-500 hover:bg-pink-600"
+            className="flex items-center justify-center   mt-5 bg-pink-500 hover:bg-pink-600"
           >
-            {isLoading && <CustomLoader />}
-            {isLoading ? "Generating..." : "Generate ✨"}
+            {isLoading && (
+              <div className="mr-2">
+                <CustomLoader />
+              </div>
+            )}
+            {isLoading ? "Generating..." : "Generate"}
+            {!isLoading && (
+              <Image
+                src={token}
+                alt="token"
+                width={20}
+                height={20}
+                className="ml-2"
+              />
+            )}
+            {!isLoading && <h2 className="font-bold">{constants.ideasPrice}</h2>}
           </Button>
         </div>
       </form>

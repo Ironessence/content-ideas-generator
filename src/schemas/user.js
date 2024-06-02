@@ -1,5 +1,20 @@
 import mongoose, { Schema } from "mongoose";
 
+const scriptSchema = new Schema({
+  scene: {
+    type: String,
+    required: true,
+  },
+  visuals: {
+    type: String,
+    required: true,
+  },
+  dialogue: {
+    type: String,
+    required: true,
+  },
+});
+
 const ideaSchema = new Schema({
   createdAt: {
     type: Date,
@@ -14,7 +29,7 @@ const ideaSchema = new Schema({
     required: true,
   },
   script: {
-    type: String,
+    type: [scriptSchema],
     required: false,
   },
   isSaved: {

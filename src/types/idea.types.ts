@@ -18,5 +18,5 @@ export type IdeaType = {
   idea: string;
   shortDescription: string;
   isSaved?: boolean;
-  script?: ScriptDataType;
+  script?: ScriptType[];
 };
