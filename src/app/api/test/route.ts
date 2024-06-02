@@ -53,8 +53,6 @@ export async function POST(req: Request) {
   //   // Extract the response content
   //   const responseData = response.choices[0].message.content;
 
-  //   console.log("RESPONSE DATA IN BE:", responseData);
-
   const responseData = {
     ideas: [
       {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useToast } from "@/components/ui/use-toast";
 import { getUserFromDb } from "@/lib/clientApi";
 import { IUser } from "@/types/user.types";
 import { useSession } from "next-auth/react";
@@ -25,6 +26,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<IUser | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
+  const { toast } = useToast();
 
   // The function is used to both get the user and also refresh the user data for example for displaying the new tokens
   const refreshUser = useCallback(async () => {
@@ -32,13 +34,16 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     if (session?.user?.email) {
       getUserFromDb(session.user.email)
         .then((res) => setUser(res))
-        .catch((err) => {
-          console.log("unable to correctly authenticate, please contact support", err);
+        .catch(() => {
+          toast({
+            title: "Unable to retrieve user data!",
+            description: "Please try again later. If the problem persists, contact support.",
+          });
           router.push("/");
         })
         .finally(() => setIsLoading(false));
     }
-  }, [router, session?.user?.email]);
+  }, [router, session?.user?.email, toast]);
 
   useEffect(() => {
     refreshUser();

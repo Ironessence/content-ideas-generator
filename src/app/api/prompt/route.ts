@@ -52,8 +52,6 @@ export async function POST(req: Request) {
   // Extract the response content
   const responseData = response.choices[0].message.content;
 
-  console.log("RESPONSE DATA IN BE:", responseData);
-
   // Respond with the JSON data
   return new NextResponse(JSON.stringify(responseData), {
     headers: {

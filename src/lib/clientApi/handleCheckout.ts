@@ -7,7 +7,6 @@ export const handleCheckout = async (user: IUser, price: number) => {
   const totalPrice = price * 100;
 
   if (!user) {
-    console.log("User is not logged in");
     return;
   }
   try {
@@ -34,7 +33,6 @@ export const handleCheckout = async (user: IUser, price: number) => {
 
     return session.url;
   } catch (err) {
-    console.log("Error checkoutOrder:", err);
     return null;
   }
 };

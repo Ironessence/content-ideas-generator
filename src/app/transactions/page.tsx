@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserTransactions } from "@/lib/clientApi";
 import { TransactionType } from "@/types/transaction.types";
@@ -18,6 +19,7 @@ const Transactions = () => {
   const { user } = useUserContext();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user) {
@@ -28,10 +30,15 @@ const Transactions = () => {
           );
           setTransactions(sortedData);
         })
-        .catch((err) => console.log("Error when getting user transactions", err))
+        .catch(() => {
+          toast({
+            title: "Error obtaining transactions!",
+            description: "Please try again later. If the problem persists, contact support.",
+          });
+        })
         .finally(() => setIsLoading(false));
     }
-  }, [user]);
+  }, [toast, user]);
 
   return (
     <div className="h-[calc(100vh-70px)] overflow-auto">

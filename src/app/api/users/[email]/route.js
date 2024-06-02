@@ -1,7 +1,7 @@
 "use server";
-import { UserSchema } from "../../../../schemas/user";
 import db from "@/utils/db";
 import { NextResponse } from "next/server";
+import { UserSchema } from "../../../../schemas/user";
 
 export const GET = async (req, { params }) => {
   const { email } = params;
@@ -18,7 +18,6 @@ export const GET = async (req, { params }) => {
       return new NextResponse("User not found", { status: 404 });
     }
   } catch (err) {
-    console.log("Error occurred while fetching user:", err);
     return new NextResponse("Error fetching user", { status: 500 });
   }
 };

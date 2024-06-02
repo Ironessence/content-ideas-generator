@@ -42,11 +42,6 @@ export const POST = async (req: any) => {
         metadata: { userEmail },
       } = event.data.object as any;
 
-      console.log("Id:", id);
-      console.log("Amount:", amount_total);
-      console.log("Created:", created);
-      console.log("User Email:", userEmail);
-
       await db();
 
       try {
@@ -74,7 +69,6 @@ export const POST = async (req: any) => {
 
     return new NextResponse("All good!", { status: 200 });
   } catch (err) {
-    console.log("Error:", err);
     return new NextResponse("Internal server error!", { status: 500 });
   }
 };

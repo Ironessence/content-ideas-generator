@@ -26,14 +26,11 @@ const handler = NextAuth({
           }),
         });
         if (!response) {
-          console.log("writeUserInDb - error while writing user in DB");
           return;
         }
 
         return new NextResponse(response, { status: 200 });
-      } catch (err) {
-        console.log("writeUserInDb - catch error", err);
-      }
+      } catch (err) {}
     },
   },
 });

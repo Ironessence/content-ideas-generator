@@ -3,6 +3,7 @@ import empty from "@/assets/icons/icon-empty.png";
 import GeneratedIdea from "@/components/shared/GeneratedIdea";
 import GenerationForm from "@/components/shared/GenerationForm";
 import { SkeletonCard } from "@/components/shared/SkeletonCard";
+import { useToast } from "@/components/ui/use-toast";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
 import { useDataContext } from "@/context/DataContext";
@@ -17,6 +18,7 @@ const Generate = () => {
   const [data, setData] = useState<DataType | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { handleOpenModal } = useDataContext();
+  const { toast } = useToast();
 
   if (!user) {
     return null;
@@ -30,16 +32,16 @@ const Generate = () => {
   //     body: JSON.stringify(form.getValues()),
   //   })
   //     .then((res) => {
-  //       console.log("RES:", res);
+  //
   //       return res.clone().json();
   //     })
   //     .then((data) => {
-  //       //console.log("DATA:", JSON.parse(data));
+  //
   //       // setData(JSON.parse(data));
-  //       console.log("DATA:", data);
+  //
   //       setData(data);
   //     })
-  //     .catch((err) => console.log("err:", err))
+  //     .catch(// TODO: handle error)
   //     .finally(() => setIsLoading(false));
   // };
 
@@ -48,9 +50,8 @@ const Generate = () => {
     let sufficientTokens = true;
 
     await subtractUserTokens(user, constants.ideasPrice)
-      .then((res) => console.log("RES:", res))
-      .catch((err) => {
-        console.log("err:", err);
+      .then()
+      .catch(() => {
         handleOpenModal("InsufficientTokens");
         sufficientTokens = false;
         setIsLoading(false);
@@ -66,14 +67,17 @@ const Generate = () => {
           }),
         )
         .then((res) => {
-          console.log("RES:", res);
           return res.clone().json();
         })
         .then((data) => {
-          console.log("DATA:", data);
           setData(data);
         })
-        .catch((err) => console.log("err:", err))
+        .catch(() => {
+          toast({
+            title: "Unable to generate ideas.",
+            description: "Please try again later. If the problem persists, contact support.",
+          });
+        })
         .finally(() => {
           setIsLoading(false);
           refreshUser();

@@ -7,6 +7,7 @@ import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 import CustomLoader from "./Loader/CustomLoader";
 
 interface GeneratedIdeaProps {
@@ -20,6 +21,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
   const { user } = useUserContext();
+  const { toast } = useToast();
 
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
@@ -43,14 +45,17 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
     setIsSavingLoading(true);
     handleSaveIdea(idea, user?.email!)
       .then(() => {
-        console.log("handleSaveIdea runs");
         if (onSave) {
-          console.log("if onSave runs");
           onSave(idea);
         }
         setIsSaved(true);
       })
-      .catch((err) => console.log("error when saving idea:", err))
+      .catch(() => {
+        toast({
+          title: "Error saving idea!",
+          description: "Please try again later. If the problem persists, contact support.",
+        });
+      })
       .finally(() => setIsSavingLoading(false));
   };
 

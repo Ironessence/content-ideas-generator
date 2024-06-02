@@ -8,14 +8,11 @@ export const getUserFromDb = async (email: string) => {
       method: "GET",
     });
     if (!response) {
-      console.log("getUserFromDb - error while getting user from DB");
       return;
     }
 
     return response.json();
-  } catch (err) {
-    console.log("getUserFromDb - catch error", err);
-  }
+  } catch (err) {}
 };
 
 export const subtractUserTokens = async (user: IUser, tokens: number) => {
@@ -24,23 +21,17 @@ export const subtractUserTokens = async (user: IUser, tokens: number) => {
     return;
   }
   try {
-    console.log("THIS RUNS ?");
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/usetokens`, {
       method: "PUT",
       body: JSON.stringify({ email: user.email, tokens }),
     });
 
     if (!response) {
-      console.log("useTokens - error while updating user tokens");
       return;
     }
 
-    console.log("ALL good in subtractUserTokens");
-    console.log("RESPONSE:", response);
     return NextResponse.json({ message: "Successfully used tokens" });
-  } catch (err) {
-    console.log("useTokens - catch error", err);
-  }
+  } catch (err) {}
 };
 
 export const getUserTransactions = async (email: string) => {
@@ -50,14 +41,11 @@ export const getUserTransactions = async (email: string) => {
     });
 
     if (!response) {
-      console.log("getUserTransactions - error while getting user transactions");
       return;
     }
 
     return response.json();
-  } catch (err) {
-    console.log("getUserTransactions - catch error", err);
-  }
+  } catch (err) {}
 };
 
 export const getUserSavedIdeas = async (email: string) => {
@@ -67,14 +55,11 @@ export const getUserSavedIdeas = async (email: string) => {
     });
 
     if (!response) {
-      console.log("getUserSavedIdeas - error while getting user saved ideas");
       return;
     }
 
     return response.json();
-  } catch (err) {
-    console.log("getUserSavedIdeas - catch error", err);
-  }
+  } catch (err) {}
 };
 
 export const handleSaveIdea = async (idea: IdeaType, email: string) => {
@@ -85,12 +70,9 @@ export const handleSaveIdea = async (idea: IdeaType, email: string) => {
     });
 
     if (!response) {
-      console.log("saveIdea - error while saving idea");
       return;
     }
 
     return response.json();
-  } catch (err) {
-    console.log("saveIdea - catch error", err);
-  }
+  } catch (err) {}
 };

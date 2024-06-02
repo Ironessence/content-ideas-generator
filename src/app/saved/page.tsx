@@ -1,6 +1,7 @@
 "use client";
 import GeneratedIdea from "@/components/shared/GeneratedIdea";
 import CustomLoader from "@/components/shared/Loader/CustomLoader";
+import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserSavedIdeas } from "@/lib/clientApi";
 import { IdeaType } from "@/types/idea.types";
@@ -10,11 +11,9 @@ const Saved = () => {
   const { user } = useUserContext();
   const [savedIdeas, setSavedIdeas] = useState<IdeaType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { toast } = useToast();
 
   const onSave = (idea: IdeaType) => {
-    console.log("ON SAVE RUNS");
-    const remainingIdeas = savedIdeas.filter((prev) => prev._id !== idea._id);
-    console.log("remainingIdeas:", remainingIdeas);
     setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
   };
 
@@ -24,10 +23,15 @@ const Saved = () => {
         .then((data) => {
           setSavedIdeas(data);
         })
-        .catch((err) => console.log("Error when getting user transactions", err))
+        .catch(() => {
+          toast({
+            title: "Error obtaining saved ideas",
+            description: "Please try again. If the problem persists, contact support.",
+          });
+        })
         .finally(() => setIsLoading(false));
     }
-  }, [user]);
+  }, [toast, user]);
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-70px)]">
