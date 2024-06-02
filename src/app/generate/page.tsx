@@ -103,8 +103,6 @@ const Generate = () => {
             {isLoading && (
               <div className="flex flex-col items-center justify-center gap-7 w-full md:flex-row md:w-[75%] md:mb-10 ">
                 <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
               </div>
             )}
             {data && data.ideas.length > 0 ? (

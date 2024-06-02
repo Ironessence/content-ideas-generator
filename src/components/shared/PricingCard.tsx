@@ -11,7 +11,7 @@ interface PricingCardProps {
   option: PricingOptionsType;
 }
 
-loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
+loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!}`);
 
 const PricingCard = ({ option }: PricingCardProps) => {
   const { title, bonus, image, price, mostPopular, aproxIdeas, link } = option;

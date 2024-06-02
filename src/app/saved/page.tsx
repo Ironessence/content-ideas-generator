@@ -12,6 +12,7 @@ const Saved = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const onSave = (idea: IdeaType) => {
+    console.log("ON SAVE RUNS");
     const remainingIdeas = savedIdeas.filter((prev) => prev._id !== idea._id);
     console.log("remainingIdeas:", remainingIdeas);
     setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));

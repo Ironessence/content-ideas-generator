@@ -55,10 +55,10 @@ const Transactions = () => {
             <TableBody>
               {transactions.map((transaction) => (
                 <TableRow
-                  key={transaction.id}
+                  key={transaction._id}
                   className="hover:bg-transparent"
                 >
-                  <TableCell>{transaction.id.substring(0, 15) + "..."}</TableCell>
+                  <TableCell>{transaction._id.toString().substring(0, 15) + "..."}</TableCell>
                   <TableCell>{new Date(transaction.createdAt).toLocaleString()}</TableCell>
                   <TableCell className="font-semibold">{transaction.quantity}</TableCell>
 

@@ -21,6 +21,8 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const [isError, setIsError] = useState<boolean>(false);
   const { user } = useUserContext();
 
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+
   const handleGenerateScript = async () => {
     setIsLoading(true);
     await fetch("http://localhost:3000/api/script", {
@@ -46,6 +48,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
           console.log("if onSave runs");
           onSave(idea);
         }
+        setIsSaved(true);
       })
       .catch((err) => console.log("error when saving idea:", err))
       .finally(() => setIsSavingLoading(false));
@@ -59,7 +62,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         </div>
       ) : (
         <Image
-          src={idea.isSaved ? saveFilled : saveEmpty}
+          src={idea.isSaved || isSaved ? saveFilled : saveEmpty}
           alt="save icon"
           width={25}
           height={25}

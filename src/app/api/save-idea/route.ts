@@ -27,7 +27,7 @@ export const POST = async (req: Request) => {
       } else {
         await UserSchema.findOneAndUpdate(
           { email: email },
-          { $pull: { savedIdeas: { id: idea.id } } },
+          { $pull: { savedIdeas: { _id: idea._id } } },
           { new: true },
         );
       }
@@ -35,7 +35,7 @@ export const POST = async (req: Request) => {
       return new NextResponse(JSON.stringify(err), { status: 500 });
     }
 
-    return new NextResponse("Successfully saved idea!", {
+    return new NextResponse(JSON.stringify(idea), {
       status: 200,
     });
   } catch (err) {
