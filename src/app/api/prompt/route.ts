@@ -29,7 +29,6 @@ export async function POST(req: Request) {
           {
             id: 1,
             idea: *The actual idea, explained in a brief summary*,
-            viralityScore: *Your own estimation of how likely it is for a video that displays the idea to go viral on Instagram*,
             shortDescription: *A brief description of the idea, in 50 to 150 words*,
           },
           {

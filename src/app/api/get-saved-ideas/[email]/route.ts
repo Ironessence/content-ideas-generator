@@ -17,10 +17,12 @@ export const GET = async (req: Request, { params }: any) => {
       return new NextResponse("User not found", { status: 404 });
     }
 
-    // Assuming the UserSchema has a field 'transactions' which is an array of transaction objects
     const savedIdeas = user.savedIdeas;
+    const sortedSavedIdeas = savedIdeas.sort(
+      (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
 
-    return new NextResponse(JSON.stringify(savedIdeas), {
+    return new NextResponse(JSON.stringify(sortedSavedIdeas), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

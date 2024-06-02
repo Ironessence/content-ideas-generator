@@ -1,47 +1,42 @@
 import mongoose, { Schema } from "mongoose";
 
 const ideaSchema = new Schema({
-  id: {
-    type: Number,
+  createdAt: {
+    type: Date,
     required: true,
   },
   idea: {
     type: String,
     required: true,
   },
-  viralityScore: {
-    type: Number,
-    required: true,
-  },
   shortDescription: {
     type: String,
     required: true,
   },
+  script: {
+    type: String,
+    required: false,
+  },
+  isSaved: {
+    type: Boolean,
+    required: true,
+  },
 });
 
-const transactionSchema = new Schema(
-  {
-    createdAt: {
-      type: Date,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true,
-    },
+const transactionSchema = new Schema({
+  createdAt: {
+    type: Date,
+    required: true,
   },
-  {
-    _id: false, // Prevents creating a unique _id for each subdocument
+  price: {
+    type: Number,
+    required: true,
   },
-);
+  quantity: {
+    type: Number,
+    required: true,
+  },
+});
 
 const userSchema = new Schema(
   {

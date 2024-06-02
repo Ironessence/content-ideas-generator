@@ -5,23 +5,21 @@ import { useUserContext } from "@/context/AuthContext";
 import { handleSaveIdea } from "@/lib/clientApi";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import CustomLoader from "./Loader/CustomLoader";
 
 interface GeneratedIdeaProps {
   idea: IdeaType;
+  onSave?: (idea: IdeaType) => void;
 }
 
-const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
   const { user } = useUserContext();
-  const pathname = usePathname();
 
   const handleGenerateScript = async () => {
     setIsLoading(true);
@@ -30,11 +28,9 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
       body: JSON.stringify(idea),
     })
       .then((res) => {
-        console.log("RES:", res);
         return res.clone().json();
       })
       .then((data) => {
-        console.log("DATA:", JSON.parse(data));
         setScript(JSON.parse(data));
       })
       .catch(() => setIsError(true))
@@ -44,36 +40,40 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
   const handleClickSaveIdea = () => {
     setIsSavingLoading(true);
     handleSaveIdea(idea, user?.email!)
-      .then(() => setIsSaved((prev) => !prev))
+      .then(() => {
+        console.log("handleSaveIdea runs");
+        if (onSave) {
+          console.log("if onSave runs");
+          onSave(idea);
+        }
+      })
       .catch((err) => console.log("error when saving idea:", err))
       .finally(() => setIsSavingLoading(false));
   };
 
   return (
-    <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] ">
-      {pathname !== "/saved" ? (
-        isSavingLoading ? (
-          <div className="flex justify-end">
-            <CustomLoader />
-          </div>
-        ) : (
-          <Image
-            src={isSaved ? saveFilled : saveEmpty}
-            alt="save icon"
-            width={25}
-            height={25}
-            priority
-            className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
-            onClick={handleClickSaveIdea}
-          />
-        )
-      ) : null}
+    <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] sm:max-w-[900px] ">
+      {isSavingLoading ? (
+        <div className="flex justify-end">
+          <CustomLoader />
+        </div>
+      ) : (
+        <Image
+          src={idea.isSaved ? saveFilled : saveEmpty}
+          alt="save icon"
+          width={25}
+          height={25}
+          priority
+          className="object-fit cursor-pointer mb-2 ml-auto transition-transform duration-200 active:scale-110"
+          onClick={handleClickSaveIdea}
+        />
+      )}
+
       <h2 className="font-semibold">Idea:</h2>
       <h2 className="mb-3">{idea.idea}</h2>
       <h2 className="font-semibold">Short description:</h2>
       <p className="mb-3">{idea.shortDescription}</p>
       <h2 className="font-semibold">Estimated virality score:</h2>
-      <p className="mb-3">{idea.viralityScore}</p>
       {isError && (
         <p>
           There was an error generating the script. Please wait for a few seconds then try again. If

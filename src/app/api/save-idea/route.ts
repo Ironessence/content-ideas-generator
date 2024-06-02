@@ -18,12 +18,19 @@ export const POST = async (req: Request) => {
     }
 
     try {
-      console.log("IDEA:", idea);
-      await UserSchema.findOneAndUpdate(
-        { email: email },
-        { $push: { savedIdeas: idea } },
-        { new: true },
-      );
+      if (!idea.isSaved) {
+        await UserSchema.findOneAndUpdate(
+          { email: email },
+          { $push: { savedIdeas: { ...idea, isSaved: true, createdAt: new Date() } } },
+          { new: true },
+        );
+      } else {
+        await UserSchema.findOneAndUpdate(
+          { email: email },
+          { $pull: { savedIdeas: { id: idea.id } } },
+          { new: true },
+        );
+      }
     } catch (err) {
       return new NextResponse(JSON.stringify(err), { status: 500 });
     }

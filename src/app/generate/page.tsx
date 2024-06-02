@@ -99,7 +99,7 @@ const Generate = () => {
         </div>
         <div className="flex-1 mt-10 w-full items-center justify-center ">
           <h2 className="text-center font-semibold">Results:</h2>
-          <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4 md:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-center flex-wrap gap-4">
             {isLoading && (
               <div className="flex flex-col items-center justify-center gap-7 w-full md:flex-row md:w-[75%] md:mb-10 ">
                 <SkeletonCard />

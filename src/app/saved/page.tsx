@@ -11,6 +11,12 @@ const Saved = () => {
   const [savedIdeas, setSavedIdeas] = useState<IdeaType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const onSave = (idea: IdeaType) => {
+    const remainingIdeas = savedIdeas.filter((prev) => prev._id !== idea._id);
+    console.log("remainingIdeas:", remainingIdeas);
+    setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
+  };
+
   useEffect(() => {
     if (user) {
       getUserSavedIdeas(user.email)
@@ -34,8 +40,9 @@ const Saved = () => {
           savedIdeas.length > 0 &&
           savedIdeas.map((idea) => (
             <GeneratedIdea
-              key={idea.id}
+              key={idea._id}
               idea={idea}
+              onSave={onSave}
             />
           ))}
       </div>

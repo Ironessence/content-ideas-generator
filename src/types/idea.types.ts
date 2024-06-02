@@ -13,9 +13,10 @@ export type ScriptType = {
 };
 
 export type IdeaType = {
-  id: number;
+  _id: number;
+  createdAt: Date;
   idea: string;
-  viralityScore: number;
   shortDescription: string;
+  isSaved?: boolean;
   script?: ScriptDataType;
 };
