@@ -1,4 +1,3 @@
-import heroImg from "@/assets/heroImage.png";
 import checkmark from "@/assets/icons/checkmark.png";
 import arrow from "@/assets/icons/right-arrow.png";
 import { useUserContext } from "@/context/AuthContext";
@@ -15,14 +14,15 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div className="flex my-[5%]">
-      <div className="flex-1 flex flex-col items-center gap-5 my-[100px]  ">
+    <div className="flex my-[15vh] w-[95%] mr-auto ml-auto flex-col sm:flex-row">
+      {/* RIGHT SECTION */}
+      <div className="flex-1 flex flex-col items-center gap-5   ">
         <h1 className="text-[56px] font-extrabold  text-gray-200 drop-shadow-lg">
           Create <span className="text-pink-500">Quality</span> Social Media Content in{" "}
           <span className="bg-pink-500 p-1 px-2">Minutes</span>
         </h1>
 
-        <div className="flex flex-col gap-2 mr-auto">
+        <div className="flex flex-col gap-2 ">
           <div className="flex items-center justify-center gap-1">
             <Image
               src={checkmark}
@@ -33,7 +33,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             />
             <h3>Trained to generate viral ideas & content</h3>
           </div>
-          <div className="flex items-center justify-left gap-1">
+          <div className="flex items-center  gap-1">
             <Image
               src={checkmark}
               alt="checkmark"
@@ -43,7 +43,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             />
             <h3>Saves hours of your time</h3>
           </div>
-          <div className="flex items-center justify-left gap-1">
+          <div className="flex items-center  gap-1">
             <Image
               src={checkmark}
               alt="checkmark"
@@ -55,7 +55,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
           </div>
         </div>
 
-        <div className="mr-auto mt-5">
+        <div className=" mt-5">
           <TrustedBy />
         </div>
 
@@ -77,14 +77,6 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             height={20}
           />
         </Button>
-      </div>
-      <div className="flex flex-1 justify-center items-start">
-        <Image
-          src={heroImg}
-          priority
-          alt="img-test"
-          className="w-[400px] object-fit"
-        />
       </div>
     </div>
   );

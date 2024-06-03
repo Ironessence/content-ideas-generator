@@ -25,6 +25,7 @@
     "best-effort-json-parser": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.2.10",
     "lucide-react": "^0.378.0",
     "mongodb": "^6.6.1",
     "mongoose": "^8.3.4",
