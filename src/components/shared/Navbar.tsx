@@ -1,5 +1,7 @@
 "use client";
+import logo from "@/assets/logo/logo.png";
 import { useUserContext } from "@/context/AuthContext";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -17,9 +19,17 @@ const Navbar = () => {
         className="h-auto w-auto cursor-pointer"
         onClick={() => router.push("/")}
       >
-        <h2 className={`font-sans text-2xl font-extrabold tracking-widest text-white`}>
-          HashtagFast
-        </h2>
+        <div className="flex items-center justify-center">
+          <Image
+            src={logo}
+            alt="logo"
+            width={45}
+            height={25}
+          />
+          <h2 className={`font-sans text-2xl font-extrabold tracking-wider text-white`}>
+            HashtagFast
+          </h2>
+        </div>
       </div>
       {pathname !== "/" && !isLoading && (
         <div className="h-auto w-auto">

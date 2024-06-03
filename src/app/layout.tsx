@@ -1,3 +1,4 @@
+import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/shared/Navbar";
 import PurchaseTokensDrawer from "@/components/shared/PurchaseTokensDrawer";
 import { Toaster } from "@/components/ui/toaster";
@@ -26,6 +27,7 @@ export default function RootLayout({
           <div className="bg-gradient-to-r from-gray-900 to-slate-700">
             <Navbar />
             {children}
+            <Footer />
             <Toaster />
             <PurchaseTokensDrawer />
           </div>
