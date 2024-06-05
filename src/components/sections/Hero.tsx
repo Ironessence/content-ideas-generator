@@ -1,4 +1,3 @@
-import blob from "@/assets/blob.gif";
 import checkmark from "@/assets/icons/checkmark.png";
 import arrow from "@/assets/icons/right-arrow.png";
 import { useUserContext } from "@/context/AuthContext";
@@ -15,16 +14,11 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[10vh]  ">
+    <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[5vh] sm:my-[10vh]">
       {/* RIGHT SECTION */}
       <div className="flex-1 flex flex-col items-center gap-5 relative">
-        <Image
-          src={blob}
-          alt="blob"
-          className=" absolute opacity-50 z-[-1] w-[100vw] h-[100vh] aspect-square sm:object-fill top-[-30vh] right-[-10vw]"
-        />
         <h1 className="text-[56px] font-extrabold  text-white drop-shadow-lg text-center ">
-          Create{" "}
+          🎯Create{" "}
           <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
             Quality
           </span>{" "}
