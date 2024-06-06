@@ -9,6 +9,7 @@ const Pricing = () => {
           easy
         </span>
       </h1>
+      <div className="bg-slate-600 w-[60%] h-[1px] mr-auto ml-auto my-4" />
       <h2 className="text-center sm:text-[22px] text-[18px] py-10 mb-10">
         You{" "}
         <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold">
@@ -31,7 +32,7 @@ const Pricing = () => {
             className="py-3"
           />
           <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
-            Price: $10
+            $10
           </h1>
         </div>
         <div className="pb-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center sm:min-h-[350px] min-h-[300px]  bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:translate-y-[-10px] animate-all duration-500 transition-ease-in-out">
@@ -52,7 +53,7 @@ const Pricing = () => {
             className="py-3"
           />
           <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
-            Price: $20
+            $20
           </h1>
         </div>
         <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center sm:min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:translate-y-[-10px] animate-all duration-500 transition-ease-in-out min-h-[300px]">
@@ -69,7 +70,7 @@ const Pricing = () => {
             className="py-3"
           />
           <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
-            Price: $30
+            $30
           </h1>
         </div>
       </div>

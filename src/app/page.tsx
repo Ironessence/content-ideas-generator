@@ -1,6 +1,7 @@
 "use client";
 
 import Hero from "@/components/sections/Hero";
+import Platforms from "@/components/sections/Platforms";
 import Pricing from "@/components/sections/Pricing";
 import Special from "@/components/sections/Special";
 import SignInDialog from "@/components/shared/SignInDialog";
@@ -14,7 +15,7 @@ export default function Home() {
       <Hero setIsLoginOpen={setIsLoginOpen} />
       <Special />
       <Pricing />
-
+      <Platforms />
       <SignInDialog
         isLoginOpen={isLoginOpen}
         setIsLoginOpen={setIsLoginOpen}

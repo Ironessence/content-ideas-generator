@@ -21,6 +21,7 @@ const Special = () => {
           </span>{" "}
           so <span className="text-white">✨Special✨?</span>
         </h1>
+        <div className="bg-slate-600 w-[60%] h-[1px] mr-auto ml-auto mb-4" />
         <div className="flex items-center justify-center gap-10 px-20 flex-col  flex-1 lg:mt-[10vh] lg:gap-[15vh]">
           {/* ROW 1 */}
           <div className="flex items-start justify-center gap-10 flex-col sm:flex-row">
