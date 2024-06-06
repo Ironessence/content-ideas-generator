@@ -90,8 +90,8 @@ const TrustedBy = () => {
             priority
           />
         </div>
-        <h1 className="whitespace-nowrap font-semibold">
-          <span className="font-bold">Trusted</span> by hundreds of content creators
+        <h1 className="whitespace-nowrap font-semibold text-[14px] md:text-[18px]">
+          <span className="font-bold ">Trusted</span> by hundreds of content creators
         </h1>
       </div>
     </div>

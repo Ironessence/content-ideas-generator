@@ -2,9 +2,9 @@ import arrow from "@/assets/icons/right-arrow.png";
 import { useUserContext } from "@/context/AuthContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { BackgroundBeams } from "../shared/BackgroundBeams";
 import TrustedBy from "../shared/TrustedBy";
 import { Button } from "../ui/button";
+import { Spotlight } from "../ui/spotlight";
 
 interface HeroProps {
   setIsLoginOpen: (value: boolean) => void;
@@ -15,11 +15,16 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const router = useRouter();
   return (
     <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[5vh] sm:my-[10vh] min-h-[55vh]">
+      <Spotlight
+        className="-top-40 left-0 lg:left-[35vw] lg:-top-20"
+        fill="white"
+      />
+
       {/* RIGHT SECTION */}
       <div className="flex-1 flex flex-col items-center gap-5 relative">
-        <h1 className="text-[56px] font-extrabold  text-white drop-shadow-lg text-center ">
+        <h1 className="text-[36px] md:text-[54px] font-extrabold  text-white drop-shadow-lg text-center ">
           🎯Create{" "}
-          <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold">
             Quality
           </span>{" "}
           Social Media Content in{" "}
@@ -27,7 +32,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             Minutes
           </span>
         </h1>
-        <h1 className="text-[42px] font-extrabold  text-white drop-shadow-lg text-center ">
+        <h1 className="text-[24px] md:text-[40px] font-extrabold  text-white drop-shadow-lg text-center ">
           and{" "}
           <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
             grow your audience
@@ -59,7 +64,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
 
         <TrustedBy />
       </div>
-      <BackgroundBeams />
+      {/* <BackgroundBeams /> */}
     </div>
   );
 };
