@@ -1,8 +1,8 @@
-import checkmark from "@/assets/icons/checkmark.png";
 import arrow from "@/assets/icons/right-arrow.png";
 import { useUserContext } from "@/context/AuthContext";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { BackgroundBeams } from "../shared/BackgroundBeams";
 import TrustedBy from "../shared/TrustedBy";
 import { Button } from "../ui/button";
 
@@ -14,7 +14,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
   const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[5vh] sm:my-[10vh]">
+    <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[5vh] sm:my-[10vh] min-h-[55vh]">
       {/* RIGHT SECTION */}
       <div className="flex-1 flex flex-col items-center gap-5 relative">
         <h1 className="text-[56px] font-extrabold  text-white drop-shadow-lg text-center ">
@@ -27,42 +27,19 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             Minutes
           </span>
         </h1>
-
-        <div className="flex flex-col gap-2 ">
-          <div className="flex items-center justify-center gap-1">
-            <Image
-              src={checkmark}
-              alt="checkmark"
-              width={20}
-              height={20}
-              priority
-            />
-            <h3>Trained to generate viral ideas & content</h3>
-          </div>
-          <div className="flex items-center  gap-1">
-            <Image
-              src={checkmark}
-              alt="checkmark"
-              width={20}
-              height={20}
-              priority
-            />
-            <h3 className="mix-blend">Saves hours of your time</h3>
-          </div>
-          <div className="flex items-center  gap-1">
-            <Image
-              src={checkmark}
-              alt="checkmark"
-              width={20}
-              height={20}
-              priority
-            />
-            <h3>Advanced configurability</h3>
-          </div>
-        </div>
+        <h1 className="text-[42px] font-extrabold  text-white drop-shadow-lg text-center ">
+          and{" "}
+          <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+            grow your audience
+          </span>{" "}
+          using our{" "}
+          <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+            trained AI Model
+          </span>
+        </h1>
 
         <Button
-          className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-pink-500 hover:bg-pink-500"
+          className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-gradient-to-r from-pink-500 to-purple-500 hover:bg-pink-500 border-[1px] border-blue-300"
           onClick={() => {
             if (!user) {
               setIsLoginOpen(true);
@@ -71,7 +48,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
             }
           }}
         >
-          Try it out
+          🚀 Try it out
           <Image
             src={arrow}
             alt="arrow"
@@ -82,6 +59,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
 
         <TrustedBy />
       </div>
+      <BackgroundBeams />
     </div>
   );
 };

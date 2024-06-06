@@ -28,7 +28,7 @@ const Navbar = () => {
       {pathname === "/" && !isLoading && (
         <Button
           variant={"outline"}
-          className="bg-transparent hover:bg-pink-500 hover:text-white hover:border-white"
+          className="bg-transparent hover:bg-purple-500 hover:text-white hover:border-white"
           onClick={user ? () => router.push("/generate") : () => setIsLoginOpen(true)}
         >
           {user ? "Dashboard" : "Login"}
