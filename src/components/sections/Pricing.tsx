@@ -16,10 +16,13 @@ const Pricing = () => {
         </span>
         . No recurring payments, no hassle
       </h2>
-      <div className="w-full flex flex-col sm:flex-row gap-8 items-center justify-center">
-        <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:mt-[-2vh] animate-all duration-500 transition-ease-in-out">
-          <h1 className="py-3">1000 Tokens</h1>
-          <h3>Generates ~150 ideas</h3>
+      <div className="w-full flex flex-col flex-wrap sm:flex-row gap-8 items-center justify-center">
+        <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center sm:min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:translate-y-[-10px] animate-all duration-500 transition-ease-in-out min-h-[300px]">
+          <h1 className=" bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[30px] whitespace-nowrap text-[24px] ">
+            1000 Tokens
+          </h1>
+          <span className="pb-3">&nbsp;</span>
+          <h3 className="text-slate-300">Generates ~150 ideas</h3>
           <Image
             src="/assets/images/coins/coins-1.png"
             alt="coins1"
@@ -27,36 +30,47 @@ const Pricing = () => {
             height={100}
             className="py-3"
           />
-          <h1 className="py-3">Price: $10</h1>
-          <h3>(incl. taxes)</h3>
+          <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
+            Price: $10
+          </h1>
         </div>
-        <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl sm:hover:mt-[-3vh] hover:border-purple-500 animate-all duration-500 transition-ease-in-out">
-          <h1 className="py-3">2500 Tokens</h1>
-          <h2>Bonus: 500 Tokens</h2>
-          <h3>Generates ~150 ideas</h3>
+        <div className="pb-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center sm:min-h-[350px] min-h-[300px]  bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:translate-y-[-10px] animate-all duration-500 transition-ease-in-out">
+          <div className="bg-gradient-to-r from-pink-500 to-purple-500 w-full py-3 rounded-t-lg mb-2">
+            <h1 className="text-center">✨Most popular</h1>
+          </div>
+          <h1 className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[30px] whitespace-nowrap px-8 text-[24px]">
+            2500 Tokens
+          </h1>
+          <h2 className="text-blue-400 font-bold pb-3">Bonus: 500 Tokens</h2>
+
+          <h3 className="text-slate-300">Generates ~375 ideas</h3>
           <Image
-            src="/assets/images/coins/coins-1.png"
+            src="/assets/images/coins/coins-2.png"
             alt="coins1"
             width={100}
             height={100}
             className="py-3"
           />
-          <h1 className="py-3">Price: $10</h1>
-          <h3>(incl. taxes)</h3>
+          <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
+            Price: $20
+          </h1>
         </div>
-        <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl sm:hover:mt-[-3vh] hover:border-purple-500 animate-all duration-500 transition-ease-in-out">
-          <h1 className="py-3">4000 Tokens</h1>
-          <h2>Bonus: 1000 Tokens</h2>
-          <h3>Generates ~150 ideas</h3>
+        <div className="p-5 border-2 border-white rounded-xl max-w-[350px] flex flex-col items-center justify-center sm:min-h-[350px] bg-gradient-to-br from-slate-600 to-slate-800 drop-shadow-xl hover:border-purple-500 hover:translate-y-[-10px] animate-all duration-500 transition-ease-in-out min-h-[300px]">
+          <h1 className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[30px] whitespace-nowrap text-[24px] ">
+            4000 Tokens
+          </h1>
+          <h2 className="text-blue-400 font-bold pb-3">Bonus: 1000 Tokens</h2>
+          <h3 className="text-slate-300">Generates ~600 ideas</h3>
           <Image
-            src="/assets/images/coins/coins-1.png"
+            src="/assets/images/coins/coins-3.png"
             alt="coins1"
             width={100}
             height={100}
             className="py-3"
           />
-          <h1 className="py-3">Price: $10</h1>
-          <h3>(incl. taxes)</h3>
+          <h1 className="py-3 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-extrabold sm:text-[36px] text-[24px]">
+            Price: $30
+          </h1>
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ const Special = () => {
                 width={50}
                 height={50}
               />
-              <h1 className="text-[24px] font-bold text-center">Very creative</h1>
+              <h1 className="text-[24px] font-bold text-center">Highly creative</h1>
               <h3 className="text-[18px] font-extralight text-center">
                 Trained to provide stable yet creative results. You&apos;ll never get bored
               </h3>
