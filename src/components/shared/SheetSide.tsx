@@ -18,7 +18,7 @@ const SheetSide = ({ isSheetOpen, setIsSheetOpen }: SheetSideProps) => {
       >
         <SheetHeader>
           <Logo />
-          <SheetDescription>This is some text</SheetDescription>
+          <SheetDescription>This is some text updated</SheetDescription>
         </SheetHeader>
       </SheetContent>
     </Sheet>
