@@ -1,10 +1,14 @@
 "use client";
+import menu from "@/assets/icons/icon-menu.png";
 import { useUserContext } from "@/context/AuthContext";
+import useWindowSize from "@/utils/useWindowSize";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import Logo from "./Logo";
 import NavbarUserInfo from "./NavbarUserInfo";
+import SheetSide from "./SheetSide";
 import SignInDialog from "./SignInDialog";
 
 const Navbar = () => {
@@ -12,13 +16,27 @@ const Navbar = () => {
   const pathname = usePathname();
   const { user, isLoading } = useUserContext();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const size = useWindowSize();
   return (
-    <div className="h-[70px] w-full flex px-6 pt-5 align-center justify-between">
-      <div
-        className="h-auto w-auto cursor-pointer"
-        onClick={() => router.push("/")}
-      >
-        <Logo />
+    <div className="h-[70px] w-full flex px-6 pt-5 align-center justify-between ">
+      <div className="h-auto w-auto ">
+        {size.width! <= 500 && pathname !== "/" ? (
+          <div
+            className="flex items-center justify-center h-full w-full cursor-pointer"
+            onClick={() => setIsSheetOpen(!isSheetOpen)}
+          >
+            <Image
+              src={menu}
+              alt="menu"
+              width={35}
+              height={35}
+              className="mb-2"
+            />
+          </div>
+        ) : (
+          <Logo />
+        )}
       </div>
       {pathname !== "/" && !isLoading && (
         <div className="h-auto w-auto">
@@ -37,6 +55,10 @@ const Navbar = () => {
       <SignInDialog
         isLoginOpen={isLoginOpen}
         setIsLoginOpen={setIsLoginOpen}
+      />
+      <SheetSide
+        isSheetOpen={isSheetOpen}
+        setIsSheetOpen={setIsSheetOpen}
       />
     </div>
   );
