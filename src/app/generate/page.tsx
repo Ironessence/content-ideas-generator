@@ -63,7 +63,7 @@ const Generate = () => {
     if (sufficientTokens) {
       await new Promise((resolve) => setTimeout(resolve, 3000))
         .then(() =>
-          fetch("http://localhost:3000/api/test", {
+          fetch("/api/test", {
             method: "POST",
             body: JSON.stringify(form.getValues()),
           }),
