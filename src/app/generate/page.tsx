@@ -10,6 +10,7 @@ import { useDataContext } from "@/context/DataContext";
 import { subtractUserTokens } from "@/lib/clientApi";
 import { DataType } from "@/types/idea.types";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -20,6 +21,8 @@ const Generate = () => {
   const { handleOpenModal } = useDataContext();
   const { toast } = useToast();
   const resultsDivRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const typeOfContentToGenerate = searchParams.get("type") || "Instagram Reel";
 
   if (!user) {
     return null;
@@ -93,7 +96,7 @@ const Generate = () => {
   return (
     <div className="min-h-[calc(100vh-90px)]">
       <h1 className="text-center text-[24px] font-bold mt-5">
-        Generate <span className="bg-pink-500 p-1 px-2">Instagram</span> Ideas
+        Generate <span className="bg-pink-500 p-1 px-2">{typeOfContentToGenerate}</span> Ideas
       </h1>
       {/* CONTAINER */}
       <div className="flex flex-col items-center justify-center w-[100%] p-5 rounded-xl ">

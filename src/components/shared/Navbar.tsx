@@ -1,8 +1,6 @@
 "use client";
-import menu from "@/assets/icons/icon-menu.png";
 import { useUserContext } from "@/context/AuthContext";
 import useWindowSize from "@/utils/useWindowSize";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -21,22 +19,7 @@ const Navbar = () => {
   return (
     <div className="h-[70px] w-full flex px-6 pt-5 align-center justify-between ">
       <div className="h-auto w-auto ">
-        {size.width! <= 500 && pathname !== "/" ? (
-          <div
-            className="flex items-center justify-center h-full w-full cursor-pointer"
-            onClick={() => setIsSheetOpen(!isSheetOpen)}
-          >
-            <Image
-              src={menu}
-              alt="menu"
-              width={35}
-              height={35}
-              className="mb-2"
-            />
-          </div>
-        ) : (
-          <Logo />
-        )}
+        <Logo />
       </div>
       {pathname !== "/" && !isLoading && (
         <div className="h-auto w-auto">

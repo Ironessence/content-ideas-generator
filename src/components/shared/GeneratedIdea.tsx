@@ -30,7 +30,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
 
   const handleGenerateScript = async () => {
     setIsLoading(true);
-    await fetch("http://localhost:3000/api/script", {
+    await fetch("/api/script", {
       method: "POST",
       body: JSON.stringify(idea),
     })
