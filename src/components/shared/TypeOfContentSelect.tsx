@@ -40,7 +40,7 @@ const TypeOfContentSelect = () => {
   }, []);
   return (
     <>
-      <div className="mt-5 flex flex-col items-start">
+      <div className="flex flex-col items-start">
         <Label className="mb-2">Type of content:</Label>
         <Select
           onValueChange={(value) => handleSelection(value)}

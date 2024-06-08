@@ -5,7 +5,9 @@ import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
 import { handleSaveIdea } from "@/lib/clientApi";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
+import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { SelectSeparator } from "../ui/select";
@@ -25,6 +27,8 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const [isError, setIsError] = useState<boolean>(false);
   const { user } = useUserContext();
   const { toast } = useToast();
+
+  const searchParams = useSearchParams();
 
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
@@ -47,24 +51,29 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const handleClickSaveIdea = () => {
     setIsSavingLoading(true);
 
-    handleSaveIdea(
-      // TODO: Pass platform correctly
-      { ...idea, script: script?.script as any, platform: "TikTok Video" },
-      user?.email!,
-    )
-      .then(() => {
-        if (onSave) {
-          onSave(idea);
-        }
-        setIsSaved(true);
-      })
-      .catch(() => {
-        toast({
-          title: "Error saving idea!",
-          description: "Please try again later. If the problem persists, contact support.",
-        });
-      })
-      .finally(() => setIsSavingLoading(false));
+    if (searchParams.get("type")) {
+      handleSaveIdea(
+        {
+          ...idea,
+          script: script?.script as any,
+          platform: searchParams.get("type") as TypeOfContentToGenerate,
+        },
+        user?.email!,
+      )
+        .then(() => {
+          if (onSave) {
+            onSave(idea);
+          }
+          setIsSaved(true);
+        })
+        .catch(() => {
+          toast({
+            title: "Error saving idea!",
+            description: "Please try again later. If the problem persists, contact support.",
+          });
+        })
+        .finally(() => setIsSavingLoading(false));
+    }
   };
 
   return (

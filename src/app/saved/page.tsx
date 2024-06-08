@@ -5,6 +5,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
 import { getUserSavedIdeas } from "@/lib/clientApi";
 import { IdeaType } from "@/types/idea.types";
+import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Saved = () => {
@@ -13,14 +15,19 @@ const Saved = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { toast } = useToast();
 
+  const searchParams = useSearchParams();
+
+  // useEffect(() => {
+  //   console.log("searchParams", searchParams.get("type") as TypeOfContentToGenerate);
+  // }, [searchParams]);
+
   const onSave = (idea: IdeaType) => {
     setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
   };
 
   useEffect(() => {
-    if (user) {
-      // TODO: Implement get saved ideas
-      getUserSavedIdeas(user.email, "Instagram Reel")
+    if (user && searchParams.get("type")) {
+      getUserSavedIdeas(user.email, searchParams.get("type") as TypeOfContentToGenerate)
         .then((data) => {
           setSavedIdeas(data);
         })
@@ -32,11 +39,10 @@ const Saved = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [toast, user]);
+  }, [searchParams, toast, user]);
 
   return (
     <div className="flex flex-col w-[95%] ml-auto mr-auto min-h-[calc(100vh-70px)]">
-      <h1 className="text-center my-5 text-[20px] font-bold">Saved Ideas & Content</h1>
       <div className="flex w-full sm:w-[80%] mr-auto ml-auto flex-wrap items-center justify-center gap-5 pb-5">
         {!isLoading && savedIdeas.length === 0 && (
           <h2 className="text-center text-slate-400">No saved ideas to display.</h2>

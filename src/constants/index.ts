@@ -31,15 +31,3 @@ export const pricingOptions: PricingOptionsType[] = [
     aproxIdeas: 600,
   },
 ];
-
-const typesOfContentToGenerate = [
-  "Instagram Reel",
-  "TikTok Video",
-  "Instagram Post",
-  "YouTube Short",
-  "X (Twitter) Post",
-  "LinkedIn Post",
-  "Facebook Post",
-];
-
-export default typesOfContentToGenerate;

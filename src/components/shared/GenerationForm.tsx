@@ -2,14 +2,10 @@ import token from "@/assets/icons/icon-coin.png";
 import { constants } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  instagramContentType,
-  optimizeForType,
-  toneType,
-  videoLengthType,
-} from "../../utils/generationData";
+import { optimizeForType, toneType, videoLengthType } from "../../utils/generationData";
 import { Button } from "../ui/button";
 import { Form } from "../ui/form";
 import { Input } from "../ui/input";
@@ -25,8 +21,9 @@ interface GenerationFormProps {
 }
 
 const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormProps) => {
+  const searchParams = useSearchParams();
+
   const formSchema = z.object({
-    contentType: z.string(),
     toneType: z.string(),
     videoLength: z.string(),
     optimizeFor: z.string(),
@@ -39,7 +36,6 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
     resolver: zodResolver(formSchema),
     mode: "onBlur",
     defaultValues: {
-      contentType: "Reel",
       toneType: "None",
       videoLength: "0-15 seconds",
       optimizeFor: "Nothing",
@@ -59,18 +55,10 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
         onSubmit={form.handleSubmit(handleFormSubmit)}
         className="text-black flex flex-col gap-2 w-full items-center  "
       >
-        <div className="flex flex-wrap gap-5 items-center justify-center ">
-          {/* CONTENT TYPE */}
-          <GenerationFormField
-            form={form}
-            title="Content Type"
-            name="contentType"
-            choices={instagramContentType.map((item) => item.title)}
-          />
-
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-5 items-center justify-center ">
           {/* ADDITIONAL FIELDS BASED ON CONTENT TYPE */}
 
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") && (
             <GenerationFormField
               form={form}
               title="Tone"
@@ -79,7 +67,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             />
           )}
 
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") != null && (
             <GenerationFormField
               form={form}
               title="Video Length"
@@ -88,7 +76,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             />
           )}
 
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") != null && (
             <GenerationFormField
               form={form}
               title="Optimize for"
@@ -99,7 +87,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
         </div>
 
         <div>
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") != null && (
             <GenerationFormField
               form={form}
               title="Niche"
@@ -123,7 +111,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             />
           )}
 
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") != null && (
             <GenerationFormField
               form={form}
               title="Keywords"
@@ -142,7 +130,7 @@ const GenerationForm = ({ onSubmit, isLoading, setIsLoading }: GenerationFormPro
             />
           )}
 
-          {form.watch("contentType") != null && (
+          {searchParams.get("type") != null && (
             <GenerationFormField
               form={form}
               title="Additional information"

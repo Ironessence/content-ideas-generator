@@ -3,15 +3,16 @@ import SkeletonPage from "@/components/shared/SkeletonPage";
 import TypeOfContentSelect from "@/components/shared/TypeOfContentSelect";
 import { Suspense } from "react";
 
-export default function GenerateLayout({
+export default function SavedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center">
       <Suspense fallback={<SkeletonCard />}>
-        <div className="mt-5 flex flex-col items-center gap-3">
+        <span className="my-5 text-[20px] font-bold ">Saved Ideas & Content</span>
+        <div className="flex flex-col items-center gap-3 mb-5">
           <TypeOfContentSelect />
         </div>
       </Suspense>
