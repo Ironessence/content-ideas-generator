@@ -19,7 +19,8 @@ const Saved = () => {
 
   useEffect(() => {
     if (user) {
-      getUserSavedIdeas(user.email)
+      // TODO: Implement get saved ideas
+      getUserSavedIdeas(user.email, "Instagram Reel")
         .then((data) => {
           setSavedIdeas(data);
         })

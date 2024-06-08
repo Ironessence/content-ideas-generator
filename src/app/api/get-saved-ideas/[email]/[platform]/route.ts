@@ -3,10 +3,14 @@ import db from "@/utils/db";
 import { NextResponse } from "next/server";
 
 export const GET = async (req: Request, { params }: any) => {
-  const { email } = params;
+  const { email, platform } = params;
 
   if (!email) {
     return new NextResponse("Email parameter is missing", { status: 400 });
+  }
+
+  if (!platform) {
+    return new NextResponse("Platform parameter is missing", { status: 400 });
   }
 
   try {
@@ -17,12 +21,15 @@ export const GET = async (req: Request, { params }: any) => {
       return new NextResponse("User not found", { status: 404 });
     }
 
-    const savedIdeas = user.savedIdeas;
-    const sortedSavedIdeas = savedIdeas.sort(
+    // Filter savedIdeas based on the platform
+    const filteredIdeas = user.savedIdeas.filter((idea: any) => idea.platform === platform);
+
+    // Sort the filtered ideas by createdAt
+    const sortedFilteredIdeas = filteredIdeas.sort(
       (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-    return new NextResponse(JSON.stringify(sortedSavedIdeas), {
+    return new NextResponse(JSON.stringify(sortedFilteredIdeas), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

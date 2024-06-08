@@ -6,8 +6,6 @@ export const POST = async (req: Request) => {
   const body = await req.json();
   const { idea, email } = body;
 
-  console.log("~~~~~~~~~~~IDEA IS:", idea);
-
   try {
     if (req.method !== "POST") {
       return new NextResponse("Only POST Requests allowed", { status: 200 });

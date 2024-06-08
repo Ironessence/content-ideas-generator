@@ -36,6 +36,12 @@ const ideaSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  platform: {
+    type: String,
+    //TODO: Add enums here as more platforms are getting added
+    enum: ["Instagram Reel", "TikTok Video"],
+    required: true,
+  },
 });
 
 const transactionSchema = new Schema({

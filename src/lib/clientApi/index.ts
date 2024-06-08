@@ -1,4 +1,5 @@
 import { IdeaType } from "@/types/idea.types";
+import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import { IUser } from "@/types/user.types";
 import { NextResponse } from "next/server";
 
@@ -48,9 +49,9 @@ export const getUserTransactions = async (email: string) => {
   } catch (err) {}
 };
 
-export const getUserSavedIdeas = async (email: string) => {
+export const getUserSavedIdeas = async (email: string, platform: TypeOfContentToGenerate) => {
   try {
-    const response = await fetch(`/api/get-saved-ideas/${email}`, {
+    const response = await fetch(`/api/get-saved-ideas/${email}/${platform}`, {
       method: "GET",
     });
 

@@ -1,3 +1,5 @@
+import { TypeOfContentToGenerate } from "./typeOfContentToGenerate";
+
 export type DataType = {
   ideas: IdeaType[];
 };
@@ -19,4 +21,5 @@ export type IdeaType = {
   shortDescription: string;
   isSaved?: boolean;
   script?: ScriptType[];
+  platform: TypeOfContentToGenerate;
 };

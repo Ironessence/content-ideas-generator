@@ -47,7 +47,11 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const handleClickSaveIdea = () => {
     setIsSavingLoading(true);
 
-    handleSaveIdea({ ...idea, script: script?.script as any }, user?.email!)
+    handleSaveIdea(
+      // TODO: Pass platform correctly
+      { ...idea, script: script?.script as any, platform: "TikTok Video" },
+      user?.email!,
+    )
       .then(() => {
         if (onSave) {
           onSave(idea);
