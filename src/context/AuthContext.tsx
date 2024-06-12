@@ -11,12 +11,16 @@ const initialState = {
   user: undefined,
   refreshUser: () => {},
   isLoading: false,
+  isDialogOpen: false,
+  setIsDialogOpen: () => {},
 };
 
 type InitialStateType = {
   user?: IUser;
   refreshUser: () => void;
   isLoading: boolean;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (value: boolean) => void;
 };
 
 const AuthContext = createContext<InitialStateType>(initialState);
@@ -25,6 +29,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
   const { data: session } = useSession();
   const [user, setUser] = useState<IUser | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -53,6 +58,8 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
     user,
     refreshUser,
     isLoading,
+    isDialogOpen,
+    setIsDialogOpen,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

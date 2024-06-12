@@ -6,12 +6,8 @@ import TrustedBy from "../shared/TrustedBy";
 import { Button } from "../ui/button";
 import { Spotlight } from "../ui/spotlight";
 
-interface HeroProps {
-  setIsLoginOpen: (value: boolean) => void;
-}
-
-const Hero = ({ setIsLoginOpen }: HeroProps) => {
-  const { user } = useUserContext();
+const Hero = () => {
+  const { user, setIsDialogOpen } = useUserContext();
   const router = useRouter();
   return (
     <div className="flex w-[95%] mr-auto ml-auto flex-col sm:flex-row my-[5vh] sm:my-[10vh] min-h-[55vh]">
@@ -47,7 +43,7 @@ const Hero = ({ setIsLoginOpen }: HeroProps) => {
           className="my-6 flex items-center gap-1 hover:gap-2 transition-all duration-200 bg-gradient-to-r from-pink-500 to-purple-500 hover:bg-pink-500 border-[1px] border-blue-300"
           onClick={() => {
             if (!user) {
-              setIsLoginOpen(true);
+              setIsDialogOpen(true);
             } else {
               router.push("/generate");
             }

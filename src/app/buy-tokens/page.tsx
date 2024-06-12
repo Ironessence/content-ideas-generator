@@ -1,8 +1,29 @@
 "use client";
+import stripe from "@/assets/stripeLogo.png";
 import { Button } from "@/components/ui/button";
+import { useUserContext } from "@/context/AuthContext";
+import { handleCheckout } from "@/lib/clientApi/handleCheckout";
+import { loadStripe } from "@stripe/stripe-js";
 import Image from "next/image";
+import { useEffect } from "react";
 
-const page = () => {
+loadStripe(`${process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!}`);
+
+const BuyTokens = () => {
+  const { user, setIsDialogOpen } = useUserContext();
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      console.log("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      console.log("Order canceled -- continue to shop around and checkout when you’re ready.");
+    }
+  }, []);
+
   return (
     <div className="min-h-[80vh] px-5">
       <div className="mt-5 flex flex-col items-center justify-center gap-2">
@@ -86,14 +107,29 @@ const page = () => {
           </h1>
           <Button
             className="w-[90%] bg-gradient-to-r from-pink-500 to-purple-500"
-            onClick={() => console.log("clicked")}
+            onClick={() => {
+              if (user) {
+                handleCheckout(user!, 3000).then((url) => window.open(url!, "_self"));
+              } else {
+                setIsDialogOpen(true);
+              }
+            }}
           >
             Buy now
           </Button>
         </div>
       </div>
+      <div className="flex items-center justify-center w-full">
+        <h1 className="text-slate-300">All payments are secured by</h1>
+        <Image
+          src={stripe}
+          alt="stripe"
+          width={80}
+          height={40}
+        />
+      </div>
     </div>
   );
 };
 
-export default page;
+export default BuyTokens;

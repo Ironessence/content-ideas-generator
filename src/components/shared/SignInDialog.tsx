@@ -1,18 +1,15 @@
-import React from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Button } from "../ui/button";
+"use client";
+import { useUserContext } from "@/context/AuthContext";
 import { signIn } from "next-auth/react";
+import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../ui/dialog";
 
-interface SignInDialogProps {
-  isLoginOpen: boolean;
-  setIsLoginOpen: (value: boolean) => void;
-}
-
-const SignInDialog = ({ isLoginOpen, setIsLoginOpen }: SignInDialogProps) => {
+const SignInDialog = () => {
+  const { isDialogOpen, setIsDialogOpen } = useUserContext();
   return (
     <Dialog
-      open={isLoginOpen}
-      onOpenChange={() => setIsLoginOpen(false)}
+      open={isDialogOpen}
+      onOpenChange={() => setIsDialogOpen(false)}
     >
       <DialogContent>
         <DialogHeader>
