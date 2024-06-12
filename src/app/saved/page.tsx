@@ -17,10 +17,6 @@ const Saved = () => {
 
   const searchParams = useSearchParams();
 
-  // useEffect(() => {
-  //   console.log("searchParams", searchParams.get("type") as TypeOfContentToGenerate);
-  // }, [searchParams]);
-
   const onSave = (idea: IdeaType) => {
     setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
   };

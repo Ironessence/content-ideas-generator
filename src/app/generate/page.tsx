@@ -6,11 +6,10 @@ import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import { useToast } from "@/components/ui/use-toast";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { useDataContext } from "@/context/DataContext";
 import { subtractUserTokens } from "@/lib/clientApi";
 import { DataType } from "@/types/idea.types";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -18,11 +17,11 @@ const Generate = () => {
   const { user, refreshUser } = useUserContext();
   const [data, setData] = useState<DataType | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { handleOpenModal } = useDataContext();
   const { toast } = useToast();
   const resultsDivRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const typeOfContentToGenerate = searchParams.get("type") || "Instagram Reel";
+  const router = useRouter();
 
   if (!user) {
     return null;
@@ -57,7 +56,7 @@ const Generate = () => {
     await subtractUserTokens(user, constants.ideasPrice)
       .then()
       .catch(() => {
-        handleOpenModal("InsufficientTokens");
+        router.push("/buy-tokens");
         sufficientTokens = false;
         setIsLoading(false);
         return;

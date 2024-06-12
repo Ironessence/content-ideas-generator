@@ -2,21 +2,21 @@
 import buyCoins from "@/assets/icons/buy-coins.png";
 import token from "@/assets/icons/icon-coin.png";
 import { useUserContext } from "@/context/AuthContext";
-import { useDataContext } from "@/context/DataContext";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import AvatarComponent from "./AvatarComponent";
 
 const NavbarUserInfo = () => {
   const { user } = useUserContext();
-  const { handleOpenModal } = useDataContext();
+  const router = useRouter();
 
   return (
     <div className="flex items-center justify-center gap-2">
       <Button
         variant={"outline"}
         className="bg-transparent border-slate-400 flex items-center justify-center gap-1 hover:bg-pink-500 hover:text-white hover:border-white"
-        onClick={() => handleOpenModal("Purchase")}
+        onClick={() => router.push("/buy-tokens")}
       >
         <Image
           src={buyCoins}

@@ -57,7 +57,13 @@ const BuyTokens = () => {
           </h1>
           <Button
             className="w-[90%] bg-gradient-to-r from-pink-500 to-purple-500"
-            onClick={() => console.log("clicked")}
+            onClick={() => {
+              if (user) {
+                handleCheckout(user!, 10).then((url) => window.open(url!, "_self"));
+              } else {
+                setIsDialogOpen(true);
+              }
+            }}
           >
             Buy now
           </Button>
@@ -84,7 +90,13 @@ const BuyTokens = () => {
           </h1>
           <Button
             className="w-[90%] bg-gradient-to-r from-pink-500 to-purple-500"
-            onClick={() => console.log("clicked")}
+            onClick={() => {
+              if (user) {
+                handleCheckout(user!, 20).then((url) => window.open(url!, "_self"));
+              } else {
+                setIsDialogOpen(true);
+              }
+            }}
           >
             Buy now
           </Button>
@@ -109,7 +121,7 @@ const BuyTokens = () => {
             className="w-[90%] bg-gradient-to-r from-pink-500 to-purple-500"
             onClick={() => {
               if (user) {
-                handleCheckout(user!, 3000).then((url) => window.open(url!, "_self"));
+                handleCheckout(user!, 30).then((url) => window.open(url!, "_self"));
               } else {
                 setIsDialogOpen(true);
               }

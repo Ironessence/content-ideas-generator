@@ -1,6 +1,5 @@
 import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/shared/Navbar";
-import PurchaseTokensDrawer from "@/components/shared/PurchaseTokensDrawer";
 import SignInDialog from "@/components/shared/SignInDialog";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/lib/providers/Providers";
@@ -30,7 +29,6 @@ export default function RootLayout({
             {children}
             <Footer />
             <Toaster />
-            <PurchaseTokensDrawer />
             <SignInDialog />
           </div>
         </Providers>
