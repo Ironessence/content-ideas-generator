@@ -28,15 +28,15 @@ const AuthContext = createContext<InitialStateType>(initialState);
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const [user, setUser] = useState<IUser | undefined>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
 
   // The function is used to both get the user and also refresh the user data for example for displaying the new tokens
   const refreshUser = useCallback(async () => {
-    setIsLoading(true);
     if (session?.user?.email) {
+      setIsLoading(true);
       getUserFromDb(session.user.email)
         .then((res) => setUser(res))
         .catch(() => {
