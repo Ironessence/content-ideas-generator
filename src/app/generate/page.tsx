@@ -27,69 +27,56 @@ const Generate = () => {
     return null;
   }
 
-  // const handleSubmit = async (form: UseFormReturn<any>) => {
-  //   setIsLoading(true);
-
-  //   await fetch("http://localhost:3000/api/test", {
-  //     method: "POST",
-  //     body: JSON.stringify(form.getValues()),
-  //   })
-  //     .then((res) => {
-  //
-  //       return res.clone().json();
-  //     })
-  //     .then((data) => {
-  //
-  //       // setData(JSON.parse(data));
-  //
-  //       setData(data);
-  //     })
-  //     .catch(// TODO: handle error)
-  //     .finally(() => setIsLoading(false));
-  // };
-
   const handleSubmit = async (form: UseFormReturn<any>) => {
     setIsLoading(true);
     setData(undefined);
-    let sufficientTokens = true;
-
-    await subtractUserTokens(user, constants.ideasPrice)
-      .then()
-      .catch(() => {
-        router.push("/buy-tokens");
-        sufficientTokens = false;
-        setIsLoading(false);
-        return;
-      });
-
-    if (sufficientTokens) {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-        .then(() =>
-          fetch("/api/test", {
-            method: "POST",
-            body: JSON.stringify(form.getValues()),
-          }),
-        )
-        .then((res) => {
-          if (resultsDivRef.current) {
-            resultsDivRef.current.scrollIntoView({ behavior: "smooth" });
-          }
-          return res.clone().json();
-        })
-        .then((data) => {
-          setData(data);
-        })
-        .catch(() => {
-          toast({
-            title: "Unable to generate ideas.",
-            description: "Please try again later. If the problem persists, contact support.",
-          });
-        })
-        .finally(() => {
-          setIsLoading(false);
-          refreshUser();
-        });
+    if (user.tokens < constants.ideasPrice) {
+      router.push("/buy-tokens");
+      setIsLoading(false);
+      return;
     }
+
+    //Construct the object with values from form + platform
+    const object = {
+      ...form.getValues(),
+      platform: typeOfContentToGenerate,
+    };
+
+    fetch("/api/prompt", {
+      method: "POST",
+      body: JSON.stringify(object),
+    })
+      .then((res) => {
+        if (resultsDivRef.current) {
+          resultsDivRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+        return res.clone().json();
+      })
+      .then((data) => {
+        console.log("DATA: ", data);
+        setData(JSON.parse(data));
+        console.log("PARSED DATA:", JSON.parse(data));
+        subtractUserTokens(user, constants.ideasPrice)
+          .then()
+          .catch(() => {
+            toast({
+              title: "There was a problem generating ideas.",
+              description: "Please try again later. If the problem persists, contact support.",
+            });
+            setIsLoading(false);
+            return;
+          });
+      })
+      .catch(() => {
+        toast({
+          title: "Unable to generate ideas.",
+          description: "Please try again later. If the problem persists, contact support.",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+        refreshUser();
+      });
   };
 
   return (

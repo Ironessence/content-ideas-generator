@@ -8,7 +8,7 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: Request) {
-  const { additionalInfo, keywords, niche, toneType, numberOf, contentType, platform } =
+  const { platform, toneType, videoLength, optimizeFor, niche, keywords, additionalInfo } =
     await req.json();
 
   //Request the OpenAI API for the response based on the prompt
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       {
         role: "user",
         content: `
-        I want to create a ${contentType} for my ${platform} account. My plan is to create viral videos that will engage my audience. Please provide me with ${numberOf} content ideas in a ${toneType ? toneType : "neutral"} tone. The niche I want to target is ${niche} and the keywords I want to use are ${keywords}. ${additionalInfo ? additionalInfo : ""}. Please note: The ideas should be unique, engaging and easy to implement. I should not need any props or special equipment to create the videos.  
+        I want to create a ${platform}. My plan is to create viral videos that will engage my audience. Please provide me with 3 content ideas in a ${toneType ? toneType : "neutral"} tone. The length of the video should be ${videoLength}. The niche I want to target is ${niche} and the keywords I want to use are ${keywords}. ${additionalInfo ? additionalInfo : ""}. Please note: The ideas should be unique, engaging and easy to implement. I should not need any props or special equipment to create the videos. ${optimizeFor ? `I want to optimize the videos for ${optimizeFor}.` : ""},
         `,
       },
     ],
@@ -51,6 +51,8 @@ export async function POST(req: Request) {
 
   // Extract the response content
   const responseData = response.choices[0].message.content;
+
+  console.log("IDEAS FROM BE: ", JSON.stringify(responseData));
 
   // Respond with the JSON data
   return new NextResponse(JSON.stringify(responseData), {

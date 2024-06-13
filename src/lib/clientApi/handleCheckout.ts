@@ -27,7 +27,7 @@ export const handleCheckout = async (user: IUser, price: number) => {
         userEmail: user.email,
       },
       mode: "payment",
-      success_url: `${process.env.NEXTAUTH_URL}/success`,
+      success_url: `${process.env.NEXTAUTH_URL}/generate`,
       cancel_url: `${process.env.NEXTAUTH_URL}/`,
     });
 

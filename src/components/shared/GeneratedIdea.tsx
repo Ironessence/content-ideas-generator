@@ -42,7 +42,11 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         return res.clone().json();
       })
       .then((data) => {
-        setScript(JSON.parse(data));
+        if ((idea.isSaved || isSaved) && searchParams.get("type")) {
+          console.log("save idea with script now!");
+          // Add the script to an already existing saved idea
+          setScript(JSON.parse(data));
+        }
       })
       .catch(() => setIsError(true))
       .finally(() => setIsLoading(false));
