@@ -54,21 +54,16 @@ export async function POST(req: Request) {
   //   const responseData = response.choices[0].message.content;
 
   const responseData = {
-    ideas: [
+    script: [
       {
-        idea: "1The actual idea, explained in a brief summary asd asd asd asd as",
-        shortDescription:
-          "1A brief description of the idea, in 50 to 150 words asdas fasf asfa sfpia sfas fasfas fasf asf ",
+        scene: "SCENE 666",
+        visuals: "VISUALS 5",
+        dialogue: "DIALOGUE 3",
       },
       {
-        idea: "2The actual idea, explained in a brief summary asfa sfasf asf asfa sfa",
-        shortDescription:
-          "2A brief description of the idea, in 50 to 150 words asfa sfasf asf asf asfas fasf asfas fasf asfa sfa",
-      },
-      {
-        idea: "3The actual idea, explained in a brief summary asf asfas fasf asf asf ",
-        shortDescription:
-          "3A brief description of the idea, in 50 to 150 words asfas fasf asfa sfas fasf asfas  fas",
+        scene: "SCENE 6666",
+        visuals: "VISUALS 4",
+        dialogue: "DIALOGUE 4",
       },
     ],
   };

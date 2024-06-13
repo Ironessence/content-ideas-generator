@@ -3,12 +3,12 @@ import saveFilled from "@/assets/icons/icon-save-filled.png";
 import saveEmpty from "@/assets/icons/icon-save-outline.png";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { handleSaveIdea } from "@/lib/clientApi";
+import { handleAddScriptToSavedIdea, handleSaveIdea } from "@/lib/clientApi";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { SelectSeparator } from "../ui/select";
 import { useToast } from "../ui/use-toast";
@@ -24,9 +24,14 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
   // Fix script type
   const [script, setScript] = useState<ScriptDataType | undefined>();
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
   const { user } = useUserContext();
   const { toast } = useToast();
+
+  useEffect(() => {
+    console.log("isRefreshed:", isRefreshed);
+    console.log("SCRIPT:", script?.script);
+  }, [isRefreshed, script]);
 
   const searchParams = useSearchParams();
 
@@ -34,7 +39,8 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
 
   const handleGenerateScript = async () => {
     setIsLoading(true);
-    await fetch("/api/script", {
+    // RE-ADD THIS WHEN TESTING IS DONE await fetch("/api/script", {
+    await fetch("/api/test", {
       method: "POST",
       body: JSON.stringify(idea),
     })
@@ -43,12 +49,29 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
       })
       .then((data) => {
         if ((idea.isSaved || isSaved) && searchParams.get("type")) {
-          console.log("save idea with script now!");
-          // Add the script to an already existing saved idea
-          setScript(JSON.parse(data));
+          // RE-ADD THIS WHEN TESTING IS DONE const generatedScript = JSON.parse(data);
+          const generatedScript = data;
+          handleAddScriptToSavedIdea(generatedScript, idea._id, user?.email!)
+            .then((res) => {
+              setScript(res);
+            })
+            .catch(() => {
+              toast({
+                title: "Error saving script!",
+                description: "Please try again later. If the problem persists, contact support.",
+              });
+            })
+            .finally(() => setIsRefreshed(true));
+        } else {
+          setScript(data.script);
         }
       })
-      .catch(() => setIsError(true))
+      .catch(() => {
+        toast({
+          title: "Error saving script!",
+          description: "Please try again later. If the problem persists, contact support.",
+        });
+      })
       .finally(() => setIsLoading(false));
   };
 
@@ -105,15 +128,9 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
       <SelectSeparator />
       <p className="mb-3">{idea.shortDescription}</p>
 
-      {isError && (
-        <p>
-          There was an error generating the script. Please wait for a few seconds then try again. If
-          the problem persists, please contact us.
-        </p>
-      )}
       {/* WITHOUT BEING SAVED, WE JUST ATRRIBUTE THE SCRIPT TO ANY IDEA: */}
-      {script && script.script.length > 0 && (
-        <>
+      {script && script.script.length > 0 && idea?.script?.length === 0 && (
+        <div key={isRefreshed ? "refreshed" : "not-refreshed"}>
           <h2 className="font-semibold">Script:</h2>
           <SelectSeparator />
           {script.script.length > 0 && (
@@ -133,32 +150,34 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
               ))}
             </>
           )}
-        </>
+        </div>
       )}
       {/* IF IT GETS SAVED, WE LINK THE SCRIPT WITH THE IDEA AND DISPLAY IT: */}
-      {idea.script && idea.script.length > 0 && (
-        <>
-          <h2 className="font-semibold">Script:</h2>
-          <SelectSeparator />
-          {idea.script.length > 0 && (
-            <>
-              {idea.script.map((scene, index) => (
-                <div
-                  key={index}
-                  className="mb-5"
-                >
-                  <h2 className="font-semibold">Scene:</h2>
-                  <p>{scene.scene}</p>
-                  <h2 className="font-semibold">Visuals:</h2>
-                  <p>{scene.visuals}</p>
-                  <h2 className="font-semibold">Dialogue:</h2>
-                  <p>{scene.dialogue}</p>
-                </div>
-              ))}
-            </>
-          )}
-        </>
-      )}
+      <div key={isRefreshed ? "refreshed" : "not-refreshed"}>
+        {idea.script && idea.script.length > 0 && (
+          <div>
+            <h2 className="font-semibold">Script:</h2>
+            <SelectSeparator />
+            {idea.script.length > 0 && (
+              <>
+                {idea.script.map((scene, index) => (
+                  <div
+                    key={index}
+                    className="mb-5"
+                  >
+                    <h2 className="font-semibold">Scene:</h2>
+                    <p>{scene.scene}</p>
+                    <h2 className="font-semibold">Visuals:</h2>
+                    <p>{scene.visuals}</p>
+                    <h2 className="font-semibold">Dialogue:</h2>
+                    <p>{scene.dialogue}</p>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+      </div>
       <div className="flex items-center justify-end gap-1">
         <Button
           className="bg-gray-500 flex items-center justify-center mt-5"

@@ -77,3 +77,22 @@ export const handleSaveIdea = async (idea: IdeaType, email: string) => {
     return response.json();
   } catch (err) {}
 };
+
+export const handleAddScriptToSavedIdea = async (
+  generatedScript: any,
+  ideaId: any,
+  userEmail: string,
+) => {
+  try {
+    const response = await fetch(`/api/add-script`, {
+      method: "POST",
+      body: JSON.stringify({ generatedScript, ideaId, userEmail }),
+    });
+
+    if (!response) {
+      return;
+    }
+
+    return response.json();
+  } catch (err) {}
+};
