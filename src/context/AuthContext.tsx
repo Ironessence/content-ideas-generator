@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { getUserFromDb } from "@/lib/clientApi";
+import { useGetUser } from "@/lib/react-query";
 import { IUser } from "@/types/user.types";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -28,27 +28,24 @@ const AuthContext = createContext<InitialStateType>(initialState);
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const [user, setUser] = useState<IUser | undefined>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { data: userData, isError, isLoading, isSuccess } = useGetUser(session?.user?.email!);
 
   // The function is used to both get the user and also refresh the user data for example for displaying the new tokens
   const refreshUser = useCallback(async () => {
-    if (session?.user?.email) {
-      setIsLoading(true);
-      getUserFromDb(session.user.email)
-        .then((res) => setUser(res))
-        .catch(() => {
-          toast({
-            title: "Unable to retrieve user data!",
-            description: "Please try again later. If the problem persists, contact support.",
-          });
-          router.push("/");
-        })
-        .finally(() => setIsLoading(false));
+    if (isSuccess) {
+      setUser(userData);
     }
-  }, [router, session?.user?.email, toast]);
+    if (isError) {
+      toast({
+        title: "Unable to retrieve user data!",
+        description: "Please try again later. If the problem persists, contact support.",
+      });
+      router.push("/");
+    }
+  }, [isError, isSuccess, router, toast, userData]);
 
   useEffect(() => {
     refreshUser();

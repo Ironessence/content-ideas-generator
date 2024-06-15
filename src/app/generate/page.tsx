@@ -6,7 +6,7 @@ import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import { useToast } from "@/components/ui/use-toast";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { subtractUserTokens } from "@/lib/clientApi";
+import { useSubtractUserTokens } from "@/lib/react-query";
 import { DataType } from "@/types/idea.types";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,6 +22,13 @@ const Generate = () => {
   const searchParams = useSearchParams();
   const typeOfContentToGenerate = searchParams.get("type") || "Instagram Reel";
   const router = useRouter();
+  const {
+    data: userTokensData,
+    isError,
+    isPending,
+    isSuccess,
+    mutate,
+  } = useSubtractUserTokens(user!, constants.ideasPrice);
 
   if (!user) {
     return null;
@@ -56,16 +63,7 @@ const Generate = () => {
         console.log("DATA: ", data);
         setData(JSON.parse(data));
         console.log("PARSED DATA:", JSON.parse(data));
-        subtractUserTokens(user, constants.ideasPrice)
-          .then()
-          .catch(() => {
-            toast({
-              title: "There was a problem generating ideas.",
-              description: "Please try again later. If the problem persists, contact support.",
-            });
-            setIsLoading(false);
-            return;
-          });
+        mutate();
       })
       .catch(() => {
         toast({
