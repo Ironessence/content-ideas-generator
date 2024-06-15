@@ -3,39 +3,37 @@ import GeneratedIdea from "@/components/shared/GeneratedIdea";
 import CustomLoader from "@/components/shared/Loader/CustomLoader";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
-import { getUserSavedIdeas } from "@/lib/clientApi";
+import { useGetSavedIdeas } from "@/lib/react-query";
 import { IdeaType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Saved = () => {
   const { user } = useUserContext();
-  const [savedIdeas, setSavedIdeas] = useState<IdeaType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { toast } = useToast();
-
   const searchParams = useSearchParams();
+  const {
+    data: savedIdeas,
+    isLoading,
+    isError,
+  } = useGetSavedIdeas(
+    user?.email!,
+    (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
+  );
 
   const onSave = (idea: IdeaType) => {
-    setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
+    // setSavedIdeas((prevIdeas) => prevIdeas.filter((prevIdea) => prevIdea._id !== idea._id));
   };
 
   useEffect(() => {
-    if (user && searchParams.get("type")) {
-      getUserSavedIdeas(user.email, searchParams.get("type") as TypeOfContentToGenerate)
-        .then((data) => {
-          setSavedIdeas(data);
-        })
-        .catch(() => {
-          toast({
-            title: "Error obtaining saved ideas",
-            description: "Please try again. If the problem persists, contact support.",
-          });
-        })
-        .finally(() => setIsLoading(false));
+    if (isError) {
+      toast({
+        title: "Error obtaining saved ideas",
+        description: "Please try again. If the problem persists, contact support.",
+      });
     }
-  }, [searchParams, toast, user]);
+  }, [isError, toast]);
 
   return (
     <div className="flex flex-col w-[95%] ml-auto mr-auto min-h-[calc(100vh-70px)]">
@@ -46,7 +44,7 @@ const Saved = () => {
         {isLoading && <CustomLoader />}
         {!isLoading &&
           savedIdeas.length > 0 &&
-          savedIdeas.map((idea) => (
+          savedIdeas.map((idea: IdeaType) => (
             <GeneratedIdea
               key={idea._id}
               idea={idea}

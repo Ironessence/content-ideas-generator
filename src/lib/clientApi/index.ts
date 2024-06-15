@@ -49,9 +49,27 @@ export const getUserTransactions = async (email: string) => {
   } catch (err) {}
 };
 
-export const getUserSavedIdeas = async (email: string, platform: TypeOfContentToGenerate) => {
+export const getSavedIdeas = async (email: string, platform: TypeOfContentToGenerate) => {
   try {
     const response = await fetch(`/api/get-saved-ideas/${email}/${platform}`, {
+      method: "GET",
+    });
+
+    if (!response) {
+      return;
+    }
+
+    return response.json();
+  } catch (err) {}
+};
+
+export const getIdeaById = async (
+  email: string,
+  platform: TypeOfContentToGenerate,
+  ideaId: string,
+) => {
+  try {
+    const response = await fetch(`/api/get-idea/${email}/${platform}/${ideaId}`, {
       method: "GET",
     });
 

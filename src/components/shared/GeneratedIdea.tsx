@@ -3,12 +3,13 @@ import saveFilled from "@/assets/icons/icon-save-filled.png";
 import saveEmpty from "@/assets/icons/icon-save-outline.png";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { handleAddScriptToSavedIdea, handleSaveIdea } from "@/lib/clientApi";
+import { handleAddScriptToSavedIdea } from "@/lib/clientApi";
+import { useSaveIdea } from "@/lib/react-query";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { SelectSeparator } from "../ui/select";
 import { useToast } from "../ui/use-toast";
@@ -20,25 +21,31 @@ interface GeneratedIdeaProps {
 }
 
 const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
   // Fix script type
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
   const { user } = useUserContext();
   const { toast } = useToast();
-
-  useEffect(() => {
-    console.log("isRefreshed:", isRefreshed);
-    console.log("SCRIPT:", script?.script);
-  }, [isRefreshed, script]);
-
   const searchParams = useSearchParams();
-
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const {
+    mutate,
+    data: savedIdea,
+    isPending,
+    isError,
+    isSuccess: isSaved,
+  } = useSaveIdea(
+    {
+      ...idea,
+      // Add the platform to the idea here
+      platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
+    },
+    user?.email!,
+  );
+  // TODO: WORK HERE!
+  // const [isSaved, setIsSaved] = useState<boolean>(false);
 
   const handleGenerateScript = async () => {
-    setIsLoading(true);
     // RE-ADD THIS WHEN TESTING IS DONE await fetch("/api/script", {
     await fetch("/api/test", {
       method: "POST",
@@ -71,35 +78,27 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
           title: "Error saving script!",
           description: "Please try again later. If the problem persists, contact support.",
         });
-      })
-      .finally(() => setIsLoading(false));
+      });
   };
 
   const handleClickSaveIdea = () => {
     setIsSavingLoading(true);
 
     if (searchParams.get("type")) {
-      handleSaveIdea(
-        {
-          ...idea,
-          script: script?.script as any,
-          platform: searchParams.get("type") as TypeOfContentToGenerate,
-        },
-        user?.email!,
-      )
-        .then(() => {
-          if (onSave) {
-            onSave(idea);
-          }
-          setIsSaved(true);
-        })
-        .catch(() => {
-          toast({
-            title: "Error saving idea!",
-            description: "Please try again later. If the problem persists, contact support.",
-          });
-        })
-        .finally(() => setIsSavingLoading(false));
+      mutate();
+    }
+
+    if (savedIdea) {
+      if (onSave) {
+        onSave(idea);
+      }
+    }
+
+    if (isError) {
+      toast({
+        title: "Error saving idea!",
+        description: "Please try again later. If the problem persists, contact support.",
+      });
     }
   };
 
@@ -182,17 +181,17 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         <Button
           className="bg-gray-500 flex items-center justify-center mt-5"
           onClick={handleGenerateScript}
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {isLoading && (
+          {isPending && (
             <div className="mr-2">
               <CustomLoader />
             </div>
           )}
           <h2 className="mr-1">
-            {isLoading ? "Generating..." : script ? "Regenerate script" : "Generate script"}
+            {isPending ? "Generating..." : script ? "Regenerate script" : "Generate script"}
           </h2>
-          {!isLoading && (
+          {!isPending && (
             <div className="flex items-center justify-center">
               <Image
                 src={coin}

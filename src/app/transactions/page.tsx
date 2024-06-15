@@ -11,34 +11,33 @@ import {
 } from "@/components/ui/table";
 import { useToast } from "@/components/ui/use-toast";
 import { useUserContext } from "@/context/AuthContext";
-import { getUserTransactions } from "@/lib/clientApi";
+import { useGetUserTransactions } from "@/lib/react-query";
 import { TransactionType } from "@/types/transaction.types";
 import { useEffect, useState } from "react";
 
 const Transactions = () => {
   const { user } = useUserContext();
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { data, isError, isLoading } = useGetUserTransactions(user?.email!);
 
   useEffect(() => {
-    if (user) {
-      getUserTransactions(user.email)
-        .then((data) => {
-          const sortedData = data.sort(
-            (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          );
-          setTransactions(sortedData);
-        })
-        .catch(() => {
-          toast({
-            title: "Error obtaining transactions!",
-            description: "Please try again later. If the problem persists, contact support.",
-          });
-        })
-        .finally(() => setIsLoading(false));
+    if (isError) {
+      toast({
+        title: "Error obtaining transactions!",
+        description: "Please try again later. If the problem persists, contact support.",
+      });
     }
-  }, [toast, user]);
+  }, [isError, toast]);
+
+  useEffect(() => {
+    if (data) {
+      const sortedData = data.sort(
+        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      setTransactions(sortedData);
+    }
+  }, [data]);
 
   return (
     <div className="h-[calc(100vh-70px)] overflow-auto">
