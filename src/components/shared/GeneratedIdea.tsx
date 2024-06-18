@@ -9,7 +9,7 @@ import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { SelectSeparator } from "../ui/select";
 import { useToast } from "../ui/use-toast";
@@ -17,33 +17,24 @@ import CustomLoader from "./Loader/CustomLoader";
 
 interface GeneratedIdeaProps {
   idea: IdeaType;
-  onSave?: (idea: IdeaType) => void;
 }
 
-const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
-  const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
-  // Fix script type
+const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
+  //const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
   const [script, setScript] = useState<ScriptDataType | undefined>();
   const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
   const { user } = useUserContext();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const {
-    mutate,
-    data: savedIdea,
-    isPending,
-    isError,
-    isSuccess: isSaved,
-  } = useSaveIdea(
-    {
-      ...idea,
-      // Add the platform to the idea here
-      platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
-    },
-    user?.email!,
+  const { mutate: saveIdea, isPending: isSavingIdea, isError } = useSaveIdea();
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const savedIdeaRecord = user?.savedIdeas?.find(
+    (savedIdea: IdeaType) => savedIdea._id === idea._id,
   );
-  // TODO: WORK HERE!
-  // const [isSaved, setIsSaved] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsSaved(!!savedIdeaRecord);
+  }, [savedIdeaRecord]);
 
   const handleGenerateScript = async () => {
     // RE-ADD THIS WHEN TESTING IS DONE await fetch("/api/script", {
@@ -55,7 +46,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         return res.clone().json();
       })
       .then((data) => {
-        if ((idea.isSaved || isSaved) && searchParams.get("type")) {
+        if (isSaved && searchParams.get("type")) {
           // RE-ADD THIS WHEN TESTING IS DONE const generatedScript = JSON.parse(data);
           const generatedScript = data;
           handleAddScriptToSavedIdea(generatedScript, idea._id, user?.email!)
@@ -82,17 +73,13 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
   };
 
   const handleClickSaveIdea = () => {
-    setIsSavingLoading(true);
-
-    if (searchParams.get("type")) {
-      mutate();
-    }
-
-    if (savedIdea) {
-      if (onSave) {
-        onSave(idea);
-      }
-    }
+    saveIdea({
+      idea: {
+        ...idea,
+        platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
+      },
+      email: user?.email!,
+    });
 
     if (isError) {
       toast({
@@ -104,13 +91,14 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
 
   return (
     <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] sm:max-w-[900px] w-full">
-      {isSavingLoading ? (
+      {isSavingIdea ? (
         <div className="flex justify-end">
           <CustomLoader />
         </div>
       ) : (
+        // TODO: Work on saving an idea correctly
         <Image
-          src={idea.isSaved || isSaved ? saveFilled : saveEmpty}
+          src={isSaved ? saveFilled : saveEmpty}
           alt="save icon"
           width={25}
           height={25}
@@ -152,7 +140,7 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         </div>
       )}
       {/* IF IT GETS SAVED, WE LINK THE SCRIPT WITH THE IDEA AND DISPLAY IT: */}
-      <div key={isRefreshed ? "refreshed" : "not-refreshed"}>
+      <div>
         {idea.script && idea.script.length > 0 && (
           <div>
             <h2 className="font-semibold">Script:</h2>
@@ -181,17 +169,17 @@ const GeneratedIdea = ({ idea, onSave }: GeneratedIdeaProps) => {
         <Button
           className="bg-gray-500 flex items-center justify-center mt-5"
           onClick={handleGenerateScript}
-          disabled={isPending}
+          disabled={isSavingIdea}
         >
-          {isPending && (
+          {isSavingIdea && (
             <div className="mr-2">
               <CustomLoader />
             </div>
           )}
           <h2 className="mr-1">
-            {isPending ? "Generating..." : script ? "Regenerate script" : "Generate script"}
+            {isSavingIdea ? "Generating..." : script ? "Regenerate script" : "Generate script"}
           </h2>
-          {!isPending && (
+          {!isSavingIdea && (
             <div className="flex items-center justify-center">
               <Image
                 src={coin}

@@ -59,13 +59,16 @@ export const useGetIdeaById = (
   });
 };
 
-export const useSaveIdea = (idea: IdeaType, email: string) => {
+export const useSaveIdea = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => handleSaveIdea(idea, email),
+    mutationFn: ({ idea, email }: { idea: IdeaType; email: string }) => handleSaveIdea(idea, email),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_SAVED_IDEAS, QUERY_KEYS.GET_IDEA_BY_ID],
+        queryKey: [QUERY_KEYS.GET_SAVED_IDEAS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_IDEA_BY_ID],
       });
     },
   });
