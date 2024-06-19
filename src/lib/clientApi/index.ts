@@ -1,4 +1,4 @@
-import { IdeaType } from "@/types/idea.types";
+import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import { IUser } from "@/types/user.types";
 import { NextResponse } from "next/server";
@@ -97,8 +97,8 @@ export const handleSaveIdea = async (idea: IdeaType, email: string) => {
 };
 
 export const handleAddScriptToSavedIdea = async (
-  generatedScript: any,
-  ideaId: any,
+  generatedScript: ScriptDataType,
+  ideaId: number,
   userEmail: string,
 ) => {
   try {

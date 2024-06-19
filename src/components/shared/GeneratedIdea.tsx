@@ -3,12 +3,11 @@ import saveFilled from "@/assets/icons/icon-save-filled.png";
 import saveEmpty from "@/assets/icons/icon-save-outline.png";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { handleAddScriptToSavedIdea } from "@/lib/clientApi";
-import { useSaveIdea } from "@/lib/react-query";
+import { useAddScriptToIdea, useSaveIdea } from "@/lib/react-query";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { SelectSeparator } from "../ui/select";
@@ -20,21 +19,21 @@ interface GeneratedIdeaProps {
 }
 
 const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
-  //const [isSavingLoading, setIsSavingLoading] = useState<boolean>(false);
-  const [script, setScript] = useState<ScriptDataType | undefined>();
-  const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
+  const [localScript, setLocalScript] = useState<ScriptDataType | undefined>();
   const { user } = useUserContext();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const { mutate: saveIdea, isPending: isSavingIdea, isError } = useSaveIdea();
+  const { mutate: saveIdea, isPending: isSavingIdea, isError, isSuccess } = useSaveIdea();
+  const {
+    mutate: addScriptToIdea,
+    isPending: isAddingScriptPending,
+    isError: isAddingScriptError,
+  } = useAddScriptToIdea();
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const savedIdeaRecord = user?.savedIdeas?.find(
     (savedIdea: IdeaType) => savedIdea._id === idea._id,
   );
-
-  useEffect(() => {
-    setIsSaved(!!savedIdeaRecord);
-  }, [savedIdeaRecord]);
+  const pathname = usePathname();
 
   const handleGenerateScript = async () => {
     // RE-ADD THIS WHEN TESTING IS DONE await fetch("/api/script", {
@@ -46,22 +45,21 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
         return res.clone().json();
       })
       .then((data) => {
-        if (isSaved && searchParams.get("type")) {
-          // RE-ADD THIS WHEN TESTING IS DONE const generatedScript = JSON.parse(data);
-          const generatedScript = data;
-          handleAddScriptToSavedIdea(generatedScript, idea._id, user?.email!)
-            .then((res) => {
-              setScript(res);
-            })
-            .catch(() => {
-              toast({
-                title: "Error saving script!",
-                description: "Please try again later. If the problem persists, contact support.",
-              });
-            })
-            .finally(() => setIsRefreshed(true));
+        if (!isSaved) {
+          // Work on saving & adding script at the same time in the /generate page
+          saveIdea({
+            idea: {
+              ...idea,
+              platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
+            },
+            email: user?.email!,
+          });
         } else {
-          setScript(data.script);
+          addScriptToIdea({ generatedScript: data, ideaId: idea._id, userEmail: user?.email! });
+        }
+
+        if (pathname === "/generate") {
+          setLocalScript(data);
         }
       })
       .catch(() => {
@@ -89,6 +87,26 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
     }
   };
 
+  useEffect(() => {
+    if (isAddingScriptError) {
+      toast({
+        title: "Error saving script!",
+        description: "Please try again later. If the problem persists, contact support.",
+      });
+    }
+  }, [isAddingScriptError, toast]);
+
+  // Is saved differs based on the location we're in.
+  useEffect(() => {
+    if (isSuccess && pathname === "/generate") {
+      setIsSaved(true);
+    }
+  }, [isSuccess, pathname]);
+
+  useEffect(() => {
+    setIsSaved(pathname === "/saved" ? true : !!savedIdeaRecord);
+  }, [pathname, savedIdeaRecord]);
+
   return (
     <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] sm:max-w-[900px] w-full">
       {isSavingIdea ? (
@@ -96,7 +114,6 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
           <CustomLoader />
         </div>
       ) : (
-        // TODO: Work on saving an idea correctly
         <Image
           src={isSaved ? saveFilled : saveEmpty}
           alt="save icon"
@@ -116,13 +133,13 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
       <p className="mb-3">{idea.shortDescription}</p>
 
       {/* WITHOUT BEING SAVED, WE JUST ATRRIBUTE THE SCRIPT TO ANY IDEA: */}
-      {script && script.script.length > 0 && idea?.script?.length === 0 && (
-        <div key={isRefreshed ? "refreshed" : "not-refreshed"}>
+      {pathname === "/generate" && localScript && (
+        <div>
           <h2 className="font-semibold">Script:</h2>
           <SelectSeparator />
-          {script.script.length > 0 && (
+          {localScript.script.length > 0 && (
             <>
-              {script.script.map((scene, index) => (
+              {localScript.script.map((scene, index) => (
                 <div
                   key={index}
                   className="mb-5"
@@ -171,15 +188,19 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
           onClick={handleGenerateScript}
           disabled={isSavingIdea}
         >
-          {isSavingIdea && (
+          {isAddingScriptPending && (
             <div className="mr-2">
               <CustomLoader />
             </div>
           )}
           <h2 className="mr-1">
-            {isSavingIdea ? "Generating..." : script ? "Regenerate script" : "Generate script"}
+            {isAddingScriptPending
+              ? "Generating..."
+              : localScript
+                ? "Regenerate script"
+                : "Generate script"}
           </h2>
-          {!isSavingIdea && (
+          {!isAddingScriptPending && (
             <div className="flex items-center justify-center">
               <Image
                 src={coin}

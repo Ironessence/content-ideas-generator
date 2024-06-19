@@ -1,4 +1,4 @@
-import { IdeaType } from "@/types/idea.types";
+import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import { IUser } from "@/types/user.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -6,6 +6,7 @@ import {
   getSavedIdeas,
   getUserFromDb,
   getUserTransactions,
+  handleAddScriptToSavedIdea,
   handleSaveIdea,
   subtractUserTokens,
 } from "../clientApi";
@@ -63,6 +64,29 @@ export const useSaveIdea = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ idea, email }: { idea: IdeaType; email: string }) => handleSaveIdea(idea, email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_SAVED_IDEAS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_IDEA_BY_ID],
+      });
+    },
+  });
+};
+
+export const useAddScriptToIdea = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      generatedScript,
+      ideaId,
+      userEmail,
+    }: {
+      generatedScript: ScriptDataType;
+      ideaId: number;
+      userEmail: string;
+    }) => handleAddScriptToSavedIdea(generatedScript, ideaId, userEmail),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_SAVED_IDEAS],
