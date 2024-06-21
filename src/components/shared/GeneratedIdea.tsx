@@ -3,7 +3,7 @@ import saveFilled from "@/assets/icons/icon-save-filled.png";
 import saveEmpty from "@/assets/icons/icon-save-outline.png";
 import { constants } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import { useAddScriptToIdea, useSaveIdea } from "@/lib/react-query";
+import { useAddScriptToIdea, useSaveAndAddScript, useSaveIdea } from "@/lib/react-query";
 import { IdeaType, ScriptDataType } from "@/types/idea.types";
 import { TypeOfContentToGenerate } from "@/types/typeOfContentToGenerate";
 import Image from "next/image";
@@ -23,13 +23,24 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
   const { user } = useUserContext();
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const { mutate: saveIdea, isPending: isSavingIdea, isError, isSuccess } = useSaveIdea();
+  const {
+    mutate: saveIdea,
+    isPending: isSavingIdea,
+    isError: isSavingIdeaError,
+    isSuccess: isSavingIdeaSuccess,
+  } = useSaveIdea();
   const {
     mutate: addScriptToIdea,
     isPending: isAddingScriptPending,
     isError: isAddingScriptError,
   } = useAddScriptToIdea();
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const {
+    mutate: saveAndAddScript,
+    isPending: isSavingAndAddingScriptPending,
+    isError: isSavingAndAddingScriptError,
+    isSuccess: isSavingAndAddingScriptSuccess,
+  } = useSaveAndAddScript();
+  const [isSavedLocally, setIsSavedLocally] = useState<boolean>(false);
   const savedIdeaRecord = user?.savedIdeas?.find(
     (savedIdea: IdeaType) => savedIdea._id === idea._id,
   );
@@ -45,16 +56,16 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
         return res.clone().json();
       })
       .then((data) => {
-        if (!isSaved) {
-          // Work on saving & adding script at the same time in the /generate page
-          saveIdea({
-            idea: {
-              ...idea,
-              platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
-            },
-            email: user?.email!,
-          });
+        if (!isSavedLocally) {
+          const constructedIdea = {
+            ...idea,
+            script: data.script,
+            platform: (searchParams.get("type") || "Instagram Reel") as TypeOfContentToGenerate,
+          };
+          // If an idea is NOT saved and script is generated -> add the object in the DB with isSaved:true + the script, and update the isSaved locally + the localScript locally.
+          saveAndAddScript({ idea: constructedIdea, userEmail: user?.email! });
         } else {
+          // If you are in the /generate page, you DON'T HAVE AN IDEA_ID, so you can't update the script in the DB. You just update the localScript. TODO
           addScriptToIdea({ generatedScript: data, ideaId: idea._id, userEmail: user?.email! });
         }
 
@@ -71,6 +82,7 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
   };
 
   const handleClickSaveIdea = () => {
+    // This either adds the object to the savedIdeas or removes it, based on isSaved value.
     saveIdea({
       idea: {
         ...idea,
@@ -79,7 +91,7 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
       email: user?.email!,
     });
 
-    if (isError) {
+    if (isSavingIdeaError) {
       toast({
         title: "Error saving idea!",
         description: "Please try again later. If the problem persists, contact support.",
@@ -98,24 +110,24 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
 
   // Is saved differs based on the location we're in.
   useEffect(() => {
-    if (isSuccess && pathname === "/generate") {
-      setIsSaved(true);
+    if ((isSavingIdeaSuccess || isSavingAndAddingScriptSuccess) && pathname === "/generate") {
+      setIsSavedLocally(true);
     }
-  }, [isSuccess, pathname]);
+  }, [isSavingAndAddingScriptSuccess, isSavingIdeaSuccess, pathname]);
 
   useEffect(() => {
-    setIsSaved(pathname === "/saved" ? true : !!savedIdeaRecord);
+    setIsSavedLocally(pathname === "/saved" ? true : !!savedIdeaRecord);
   }, [pathname, savedIdeaRecord]);
 
   return (
     <div className="border-2 border-gray-400 rounded-xl p-5 max-w-[600px] sm:max-w-[900px] w-full">
-      {isSavingIdea ? (
+      {isSavingIdea || isSavingAndAddingScriptPending ? (
         <div className="flex justify-end">
           <CustomLoader />
         </div>
       ) : (
         <Image
-          src={isSaved ? saveFilled : saveEmpty}
+          src={isSavedLocally ? saveFilled : saveEmpty}
           alt="save icon"
           width={25}
           height={25}
@@ -186,7 +198,7 @@ const GeneratedIdea = ({ idea }: GeneratedIdeaProps) => {
         <Button
           className="bg-gray-500 flex items-center justify-center mt-5"
           onClick={handleGenerateScript}
-          disabled={isSavingIdea}
+          disabled={isSavingIdea || isSavingAndAddingScriptPending}
         >
           {isAddingScriptPending && (
             <div className="mr-2">

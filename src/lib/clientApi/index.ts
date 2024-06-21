@@ -114,3 +114,18 @@ export const handleAddScriptToSavedIdea = async (
     return response.json();
   } catch (err) {}
 };
+
+export const handleSaveIdeaAndAddScript = async (idea: IdeaType, userEmail: string) => {
+  try {
+    const response = await fetch(`/api/save-idea`, {
+      method: "POST",
+      body: JSON.stringify({ idea, email: userEmail }),
+    });
+
+    if (!response) {
+      return;
+    }
+
+    return response.json();
+  } catch (err) {}
+};

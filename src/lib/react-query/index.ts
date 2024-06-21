@@ -8,6 +8,7 @@ import {
   getUserTransactions,
   handleAddScriptToSavedIdea,
   handleSaveIdea,
+  handleSaveIdeaAndAddScript,
   subtractUserTokens,
 } from "../clientApi";
 import { QUERY_KEYS } from "./queryKeys";
@@ -93,6 +94,19 @@ export const useAddScriptToIdea = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_IDEA_BY_ID],
+      });
+    },
+  });
+};
+
+export const useSaveAndAddScript = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ idea, userEmail }: { idea: IdeaType; userEmail: string }) =>
+      handleSaveIdeaAndAddScript(idea, userEmail),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_SAVED_IDEAS],
       });
     },
   });
